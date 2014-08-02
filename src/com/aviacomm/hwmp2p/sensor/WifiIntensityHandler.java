@@ -38,7 +38,7 @@ public class WifiIntensityHandler extends CommonSingleCircleThread{
 		} else if (rssi < -80 && rssi >= -100) {
 			level = 1;
 		} 
-		HWMP2PClient.log.i("wifi level is"+level);
+//		HWMP2PClient.log.i("wifi level is"+level);
 		handler.obtainMessage(MessageEnum.WIFIINTENSITYCHANGE,level,0).sendToTarget();
 	}
 }

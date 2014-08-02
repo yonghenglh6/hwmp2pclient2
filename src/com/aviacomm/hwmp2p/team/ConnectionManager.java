@@ -10,7 +10,6 @@ import java.util.Set;
 import com.aviacomm.hwmp2p.HWMP2PClient;
 import com.aviacomm.hwmp2p.MessageEnum;
 import com.aviacomm.hwmp2p.uitl.WifiDirectConnectionUitl;
-import com.ll.wd250util.TeamServiceBean;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -29,6 +28,7 @@ import android.net.wifi.p2p.WifiP2pManager.DnsSdServiceResponseListener;
 import android.net.wifi.p2p.WifiP2pManager.DnsSdTxtRecordListener;
 import android.net.wifi.p2p.WifiP2pManager.GroupInfoListener;
 import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceInfo;
+import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceRequest;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
@@ -39,16 +39,18 @@ public class ConnectionManager implements GroupInfoListener {
 	private Channel mChannel;
 	private WifiP2pManager mWifiP2pManager;
 	private TeamManager teamManager;
-	public static final String TXTRECORD_PROP_AVAILABLE = "available";
-	public static final String SERVICE_INSTANCE = "hwmp2pclient";
+	// public static final String TXTRECORD_PROP_AVAILABLE = "available";
+	// public static final String SERVICE_INSTANCE = "hwmp2pclient";
 	Activity mainActivity;
 	WiFiDirectBroadcastReceiver receiver;
 	private DnsSdServiceResponseListener dnsSdServiceResponseListener;
 	private DnsSdTxtRecordListener dnsSdTxtRecordListener;
 	public final String TAG = "ConnectionManager";
+	public final String INSTANCENAME = "HWMP2P";
+	public final String REGISTIONTYPE = "HWMP2P";
 	Handler handler;
 	List<MWifiDirectAP> aplist;
-
+	WifiP2pDnsSdServiceRequest serviceRequest;
 	private boolean mWifiP2pEnabled;
 	private boolean mWifiP2pSearching;
 	private int mConnectedDevices;
@@ -57,13 +59,14 @@ public class ConnectionManager implements GroupInfoListener {
 	private WifiP2pDevice mThisDevice;
 	public int SERVER_PORT;
 	public String nickname;
+
 	public ConnectionManager(Activity activity, ConnectionListener listener,
 			Handler handler) {
 		this.mainActivity = activity;
 		this.listener = listener;
 		this.handler = handler;
 	}
-	
+
 	// ！！！！ you must invoke initial function before any usage.
 	public void initial() {
 		aplist = new ArrayList<ConnectionManager.MWifiDirectAP>();
@@ -79,19 +82,11 @@ public class ConnectionManager implements GroupInfoListener {
 			public void onDnsSdServiceAvailable(String instanceName,
 					String registrationType, WifiP2pDevice srcDevice) {
 				// A service has been discovered. Is this our app?
-				if (instanceName.equalsIgnoreCase(SERVICE_INSTANCE)) {
-					Log.i(TAG, "servicefind");
-					TeamServiceRegisterTypeBean tmpTeambean = new TeamServiceRegisterTypeBean(
+				if (instanceName.equalsIgnoreCase(INSTANCENAME)) {
+					Log.i(TAG, "ServiceInstance Found");
+					MWifiDirectAP ap = MWifiDirectAP.getInstance(srcDevice,
 							registrationType);
-					if (tmpTeambean.isCreateTeam()) {
-						handler.obtainMessage(
-								MessageEnum.WIFIAPDISCOVED,
-								new Object[] { srcDevice,
-										tmpTeambean.getGsignal() });
-						if (teamManager.isReformedAp(tmpTeambean.gsignal)) {
-							connect(srcDevice, tmpTeambean.gsignal);
-						}
-					}
+					checkForList(ap);
 				}
 			}
 		};
@@ -99,11 +94,57 @@ public class ConnectionManager implements GroupInfoListener {
 		dnsSdTxtRecordListener = new DnsSdTxtRecordListener() {
 			@Override
 			public void onDnsSdTxtRecordAvailable(String arg0,
-					Map<String, String> arg1, WifiP2pDevice arg2) {
-
+					Map<String, String> record, WifiP2pDevice device) {
+				Log.i(TAG, "TXT record Found");
+				MWifiDirectAP ap = MWifiDirectAP.getInstance(device,
+						record.get("action"), record.get("gsignal"),
+						record.get("nickname"), record.get("listenport"));
+				checkForList(ap);
 			}
 		};
+		mWifiP2pManager.setDnsSdResponseListeners(mChannel,
+				dnsSdServiceResponseListener, dnsSdTxtRecordListener);
+		serviceRequest = WifiP2pDnsSdServiceRequest.newInstance();
+		mWifiP2pManager.addServiceRequest(mChannel, serviceRequest,
+				new ActionListener() {
+					@Override
+					public void onSuccess() {
+						// Success!
+						Log.i(TAG,"Add request OK");
+					}
 
+					@Override
+					public void onFailure(int code) {
+						// Command failed. Check for P2P_UNSUPPORTED, ERROR, or
+						// BUSY
+						Log.i(TAG,"Add request Wrong"+WifiDirectConnectionUitl.transferWifiDeviceStatus(code));
+					}
+				});
+
+	}
+
+	// when found a device,check if stored before, if not ,add it to aplist
+	public void checkForList(MWifiDirectAP ap) {
+		synchronized (aplist) {
+			MWifiDirectAP ori = null;
+			for (int i = 0; i < aplist.size(); i++) {
+				if (aplist.get(i).device.deviceAddress
+						.equals(ap.device.deviceAddress)) {
+					ori = aplist.get(i);
+					break;
+				}
+			}
+			if (ori == null)
+				aplist.add(ap);
+			else {
+				int state = ori.Combine(ap);
+				if (state == 1) {
+					// An ap should be listed!
+					handler.obtainMessage(MessageEnum.WIFIAPDISCOVED, ori)
+							.sendToTarget();
+				}
+			}
+		}
 	}
 
 	public void connect(WifiP2pDevice srcDevice, String gsignal) {
@@ -116,17 +157,34 @@ public class ConnectionManager implements GroupInfoListener {
 
 	public void discoverTeamService() {
 
+        mWifiP2pManager.discoverServices(mChannel, new ActionListener() {
+
+            @Override
+            public void onSuccess() {
+                // Success!
+            	Log.i(TAG,"Discover ap OK");
+            }
+
+            @Override
+            public void onFailure(int code) {
+                // Command failed.  Check for P2P_UNSUPPORTED, ERROR, or BUSY
+            	Log.i(TAG,"Discover ap Wrong"+WifiDirectConnectionUitl.transferWifiDeviceStatus(code));
+            }
+        });
 	}
-	
+
 	public void createTeamService() {
-		Map<String,String> record = new HashMap<String,String>();
-		SERVER_PORT=WifiDirectConnectionUitl.getAvailablePort();
+		Map<String, String> record = new HashMap<String, String>();
+		SERVER_PORT = WifiDirectConnectionUitl.getAvailablePort();
 		record.put("action", "CREATETEAM");
 		record.put("gsignal", WifiDirectConnectionUitl.generateGsignal());
-        record.put("listenport", String.valueOf(SERVER_PORT));
-        record.put("nickname", nickname==null?("FireFighter" + (int) (Math.random() * 1000)):nickname);
-        record.put("available", "visible");
-		
+		record.put("listenport", String.valueOf(SERVER_PORT));
+		record.put(
+				"nickname",
+				nickname == null ? ("FireFighter" + (int) (Math.random() * 1000))
+						: nickname);
+		record.put("available", "visible");
+
 		mWifiP2pManager.clearLocalServices(mChannel, new ActionListener() {
 			@Override
 			public void onSuccess() {
@@ -138,19 +196,23 @@ public class ConnectionManager implements GroupInfoListener {
 				Log.i(TAG, "removewrong" + error);
 			}
 		});
-		WifiP2pDnsSdServiceInfo addteamservice = WifiP2pDnsSdServiceInfo.newInstance(SERVICE_INSTANCE,
-				tmpTeambean.toString(), record);
-		manager.addLocalService(channel, addteamservice, new ActionListener() {
-			@Override
-			public void onSuccess() {
-				Log.i(TAG, "createTeamok");
-			}
+		WifiP2pDnsSdServiceInfo addteamservice = WifiP2pDnsSdServiceInfo
+				.newInstance(INSTANCENAME, REGISTIONTYPE, record);
+		mWifiP2pManager.addLocalService(mChannel, addteamservice,
+				new ActionListener() {
+					@Override
+					public void onSuccess() {
+						Log.i(TAG, "CreateTeamService OK");
+					}
 
-			@Override
-			public void onFailure(int error) {
-				Log.i(TAG, "createTeamWWWW");
-			}
-		});
+					@Override
+					public void onFailure(int error) {
+						Log.i(TAG,
+								"CreateTeamService Wrong:"
+										+ WifiDirectConnectionUitl
+												.transferWifiDeviceStatus(error));
+					}
+				});
 	}
 
 	private void onConnectionEstablished() {
@@ -257,17 +319,71 @@ public class ConnectionManager implements GroupInfoListener {
 		 */
 	}
 
-	class MWifiDirectAP {
-		WifiP2pDevice device;
-		String gsignal;
-		String nickname;
-		int listenPort;
+	public static class MWifiDirectAP {
+		public WifiP2pDevice device;
+		public String action;
+		public String gsignal;
+		public String nickname;
+		public String listenPort;
+		public String registerType;
+		private int infoCompletion;
+		public static final int RECORDFOUND = 1;
+		public static final int REGISTERTYPEFOUND = 2;
 
-		@Override
-		public boolean equals(Object o) {
-			return device.deviceAddress
-					.equalsIgnoreCase(((WifiP2pDevice) o).deviceAddress);
+		public MWifiDirectAP(WifiP2pDevice device, String action,
+				String gsignal, String nickname, String listenPort,
+				String registerType, int infoCompletion) {
+			super();
+			this.device = device;
+			this.action = action;
+			this.gsignal = gsignal;
+			this.nickname = nickname;
+			this.listenPort = listenPort;
+			this.registerType = registerType;
+			this.infoCompletion = infoCompletion;
 		}
+
+		public static MWifiDirectAP getInstance(WifiP2pDevice device,
+				String registerType) {
+			return new MWifiDirectAP(device, null, null, null, null,
+					registerType, REGISTERTYPEFOUND);
+		}
+
+		public static MWifiDirectAP getInstance(WifiP2pDevice device,
+				String action, String gsignal, String nickname,
+				String listenPort) {
+			return new MWifiDirectAP(device, action, gsignal, nickname,
+					listenPort, null, RECORDFOUND);
+		}
+
+		// return 1 if become comlete from incomlete
+		// update INFO from another return 0
+		// return -1 if deviceaddress is not same
+		public int Combine(MWifiDirectAP another) {
+			int isCompletion = 0;
+			if (!device.deviceAddress.equals(another.device.deviceAddress))
+				return -1;
+
+			if (another.infoCompletion == RECORDFOUND) {
+				action = another.action;
+				gsignal = another.gsignal;
+				nickname = another.nickname;
+				listenPort = another.listenPort;
+			} else if (another.infoCompletion == REGISTERTYPEFOUND) {
+				registerType = another.registerType;
+			}
+			if (infoCompletion + another.infoCompletion == RECORDFOUND
+					+ REGISTERTYPEFOUND) {
+				isCompletion = 1;
+				infoCompletion = RECORDFOUND + REGISTERTYPEFOUND;
+			}
+			return isCompletion;
+		}
+		/*
+		 * @Override public boolean equals(Object o) { return
+		 * device.deviceAddress .equalsIgnoreCase(((WifiP2pDevice)
+		 * o).deviceAddress); }
+		 */
 	}
 
 	private void handleP2pStateChanged() {

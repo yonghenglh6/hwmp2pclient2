@@ -16,19 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Team1" />
-
-        <RadioButton
-            android:id="@+id/radio1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="RadioButton" />
-
-        <RadioButton
-            android:id="@+id/radio2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="RadioButton" />
+            android:text="dontTouch,forTest" />
     </RadioGroup>
 
     <TextView
@@ -42,16 +30,22 @@
         android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/mainpage_createteam"
+            android:id="@+id/apselector_connect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Connect" />
 
         <Button
-            android:id="@+id/mainpage_scan"
+            android:id="@+id/apselector_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cancel" />
+
+        <Button
+            android:id="@+id/apselector_rescan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rescan" />
 
     </LinearLayout>
 

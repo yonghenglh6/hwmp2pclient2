@@ -50,7 +50,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/mainpage_createteam"
+        android:id="@+id/apselector_connect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_x="164dp"
@@ -74,7 +74,7 @@
     </RelativeLayout>
 
     <Button
-        android:id="@+id/mainpage_scan"
+        android:id="@+id/apselector_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_x="164dp"

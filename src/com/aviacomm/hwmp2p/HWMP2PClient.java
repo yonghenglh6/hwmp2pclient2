@@ -2,7 +2,9 @@ package com.aviacomm.hwmp2p;
 
 import com.aviacomm.hwmp2p.sensor.SensorManager;
 import com.aviacomm.hwmp2p.team.ConnectionManager;
+import com.aviacomm.hwmp2p.team.ConnectionManager.MWifiDirectAP;
 import com.aviacomm.hwmp2p.ui.APSelectorFragment;
+import com.aviacomm.hwmp2p.ui.APSelectorFragment.ApSelectorListener;
 import com.aviacomm.hwmp2p.ui.ActionPageFragment;
 import com.aviacomm.hwmp2p.ui.DisplayPageFragment;
 import com.aviacomm.hwmp2p.ui.MainPageFragment;
@@ -29,7 +31,7 @@ import android.widget.Toast;
 
 public class HWMP2PClient extends Activity implements
 		ConnectionManager.ConnectionListener, Handler.Callback,
-		MainPageListener {
+		MainPageListener,ApSelectorListener {
 
 	public static MLog log;
 	// StartPageFragment startpageFragment;
@@ -52,6 +54,7 @@ public class HWMP2PClient extends Activity implements
 		log = new MLog(handler);
 		statusView=(TextView) this.findViewById(R.id.stateText);
 		cmanager = new ConnectionManager(this,this,handler);
+		cmanager.initial();
 		SensorManager sensormanager = new SensorManager(this, getHandler());
 		
 		
@@ -121,7 +124,9 @@ public class HWMP2PClient extends Activity implements
 		case MessageEnum.LOGMESSAGE:
 			statusView.append((String)msg.obj);
 			break;
-			 
+		case MessageEnum.WIFIAPDISCOVED:
+			apSelectorFragment.handleMessage(msg);
+			break;
 		default:
 			break;
 		}
@@ -143,5 +148,24 @@ public class HWMP2PClient extends Activity implements
 	@Override
 	public void onClickCreateTeam() {
 		cmanager.createTeamService();
+		
+	}
+
+	@Override
+	public void onClickAPSelectorConnect(MWifiDirectAP ap) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onClickAPSelectorCancel() {
+		// TODO Auto-generated method stub
+		showSingleFragmentInRootContent(mainpageFragment);
+	}
+
+	@Override
+	public void onClickAPSelectorRescan() {
+		// TODO Auto-generated method stub
+		cmanager.discoverTeamService();
 	}
 }

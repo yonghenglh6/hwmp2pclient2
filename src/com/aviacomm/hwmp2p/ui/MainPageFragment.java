@@ -55,8 +55,8 @@ public class MainPageFragment extends Fragment {
 			}
 		});
 		wifi_intensity=(ImageView) view.findViewById(R.id.wifiIntensity);
-		scan=(Button) view.findViewById(R.id.mainpage_scan);
-		createTeam=(Button) view.findViewById(R.id.mainpage_createteam);
+		scan=(Button) view.findViewById(R.id.apselector_cancel);
+		createTeam=(Button) view.findViewById(R.id.apselector_connect);
 		scan.setOnClickListener(new OnClickListener() {	
 			@Override
 			public void onClick(View arg0) {

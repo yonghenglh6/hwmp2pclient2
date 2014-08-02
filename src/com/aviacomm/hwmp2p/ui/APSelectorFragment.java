@@ -1,10 +1,11 @@
 package com.aviacomm.hwmp2p.ui;
 
-
+import com.aviacomm.hwmp2p.MessageEnum;
 import com.aviacomm.hwmp2p.R;
 import com.aviacomm.hwmp2p.R.id;
 import com.aviacomm.hwmp2p.R.layout;
 import com.aviacomm.hwmp2p.team.ConnectionManager;
+import com.aviacomm.hwmp2p.team.ConnectionManager.MWifiDirectAP;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -30,36 +31,55 @@ public class APSelectorFragment extends Fragment implements Callback {
 	Button cancel;
 	RadioGroup apgroup;
 	Context context;
-	Handler apselectorHandler=new Handler(this);
-	public APSelectorFragment(Context context){
+	Handler apselectorHandler = new Handler(this);
+
+	public APSelectorFragment(Context context) {
 		super();
-		this.context=context;
+		this.context = context;
 	}
-	
-	
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_ap_selector, container, false);
-        connect=(Button) view.findViewById(R.id.mainpage_createteam);
-        connect=(Button) view.findViewById(R.id.mainpage_scan);
-        apgroup=(RadioGroup) view.findViewById(R.id.apGroup);
-        return view;
-    }
-    public Handler  getHandler(){
-    	return apselectorHandler;  	
-    }
-	public boolean handleMessage(Message msg){
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		view = inflater
+				.inflate(R.layout.fragment_ap_selector, container, false);
+		connect = (Button) view.findViewById(R.id.apselector_connect);
+		connect = (Button) view.findViewById(R.id.apselector_cancel);
+		apgroup = (RadioGroup) view.findViewById(R.id.apGroup);
+		return view;
+	}
+
+	public Handler getHandler() {
+		return apselectorHandler;
+	}
+	public interface ApSelectorListener{
+		public void onClickAPSelectorConnect(MWifiDirectAP ap);
+		public void onClickAPSelectorCancel();
+		public void onClickAPSelectorRescan();
+	}
+	public boolean handleMessage(Message msg) {
 		switch (msg.what) {
-			
+		case MessageEnum.WIFIAPDISCOVED:
+			apgroup.addView(new MAPRadioButton(getActivity(),
+					(MWifiDirectAP) msg.obj));
+			break;
 		default:
 			break;
 		}
 		return false;
 	}
-	public class ApRadioButton extends RadioButton{
-		public ApRadioButton(Context context, AttributeSet attrs) {
-			super(context, attrs);
+
+	public class MAPRadioButton extends RadioButton {
+		MWifiDirectAP ap;
+
+		public MAPRadioButton(Context context, MWifiDirectAP ap) {
+			super(context);
+			this.ap = ap;
+			this.setText(ap.device.deviceName);
+		}
+
+		public MWifiDirectAP getAp() {
+			return ap;
 		}
 	}
 }
