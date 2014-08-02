@@ -30,8 +30,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class HWMP2PClient extends Activity implements
-		ConnectionManager.ConnectionListener, Handler.Callback,
-		MainPageListener,ApSelectorListener {
+		ConnectionManager.ConnectionManagerListener, Handler.Callback,
+		MainPageListener, ApSelectorListener {
 
 	public static MLog log;
 	// StartPageFragment startpageFragment;
@@ -42,49 +42,40 @@ public class HWMP2PClient extends Activity implements
 	DisplayPageFragment displaypageFragment;
 	ActionPageFragment actionpageFragment;
 	ConnectionManager cmanager;
-	public static Handler handler ;
+	public static Handler handler;
 	Fragment currentFragmentInRootContent;
 	APSelectorFragment apSelectorFragment;
 	TextView statusView;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_hwmp2_pclient);
-		handler= new Handler(this);
+		handler = new Handler(this);
 		log = new MLog(handler);
-		statusView=(TextView) this.findViewById(R.id.stateText);
-		cmanager = new ConnectionManager(this,this,handler);
+		statusView = (TextView) this.findViewById(R.id.stateText);
+		cmanager = new ConnectionManager(this, this, handler);
 		cmanager.initial();
 		SensorManager sensormanager = new SensorManager(this, getHandler());
-		
-		
-		//init three fragment in the main activity
+
+		// init three fragment in the main activity
 		mainpageFragment = new MainPageFragment(cmanager, this);
 		displaypageFragment = new DisplayPageFragment(this);
 		actionpageFragment = new ActionPageFragment(this);
-		apSelectorFragment=new APSelectorFragment(this,this);
-		
+		apSelectorFragment = new APSelectorFragment(this, this);
+
 		rootContent = (ViewGroup) findViewById(R.id.rootContent);
 		showSingleFragmentInRootContent(mainpageFragment);
 		getFragmentManager().beginTransaction()
 				.add(R.id.displayContent, displaypageFragment).commit();
 		getFragmentManager().beginTransaction()
 				.add(R.id.actionContent, actionpageFragment).commit();
-		
-		
-		
-		
-		//start Sensor
+
+		// start Sensor
 		// startpageFragment = new StartPageFragment(this);
 		sensormanager.startall();
-
 		// show startPage
 		// showSingleFragmentInRootContent(startpageFragment);
-	}
-
-	public void onConnectionEstablished() {
-		// getFragmentManager().beginTransaction().remove(startpageFragment)
-		// .add(R.id.rootContent, mainpageFragment).commit();
 	}
 
 	private void showSingleFragmentInRootContent(Fragment page) {
@@ -95,15 +86,6 @@ public class HWMP2PClient extends Activity implements
 		transaction.add(R.id.rootContent, page);
 		transaction.commit();
 		currentFragmentInRootContent = page;
-	}
-
-	public void onClickSetting() {
-
-	}
-
-	@Override
-	public void onConnectionFailed() {
-		// TODO Auto-generated method stub
 	}
 
 	public Handler getHandler() {
@@ -120,9 +102,9 @@ public class HWMP2PClient extends Activity implements
 		case MessageEnum.WIFIINTENSITYCHANGE:
 			mainpageFragment.handleMessage(msg);
 			break;
-			
+
 		case MessageEnum.LOGMESSAGE:
-			statusView.append((String)msg.obj);
+			statusView.append((String) msg.obj);
 			break;
 		case MessageEnum.WIFIAPDISCOVED:
 			apSelectorFragment.handleMessage(msg);
@@ -134,37 +116,46 @@ public class HWMP2PClient extends Activity implements
 	}
 
 	@Override
-	public void onClickBack() {
+	public void onClickAPSelectorButton(int buttonId, Object obj) {
+		switch (buttonId) {
+		case ApSelectorListener.BUTTON_CANCEL:
+			showSingleFragmentInRootContent(mainpageFragment);
+			break;
+		case ApSelectorListener.BUTTON_CONNECT:
+			cmanager.connect((MWifiDirectAP) obj);
+			break;
+		case ApSelectorListener.BUTTON_RESCAN:
+			cmanager.discoverTeamService();
+			break;
+		default:
+			break;
+		}
+	}
+
+	@Override
+	public void onClickMainPageButton(int buttonId, Object obj) {
+		switch (buttonId) {
+		case MainPageListener.BUTTON_BACK:
+			Toast.makeText(this, "where do you want go back to?",
+					Toast.LENGTH_SHORT).show();
+			break;
+		case MainPageListener.BUTTON_SCAN:
+			showSingleFragmentInRootContent(apSelectorFragment);
+			cmanager.discoverTeamService();
+			break;
+		case MainPageListener.BUTTON_CREATETEAM:
+			cmanager.createTeamService();
+			break;
+		default:
+			break;
+		}
+
+	}
+
+	@Override
+	public void onInvokeConnectionEvent(int eventId, Object obj) {
 		// TODO Auto-generated method stub
-		Toast.makeText(this, "where do you want go back to?", Toast.LENGTH_SHORT ).show();
+
 	}
 
-	@Override
-	public void onClickScan() {
-		showSingleFragmentInRootContent(apSelectorFragment);
-		cmanager.discoverTeamService();
-	}
-
-	@Override
-	public void onClickCreateTeam() {
-		cmanager.createTeamService();
-	}
-
-	@Override
-	public void onClickAPSelectorConnect(MWifiDirectAP ap) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onClickAPSelectorCancel() {
-		// TODO Auto-generated method stub
-		showSingleFragmentInRootContent(mainpageFragment);
-	}
-
-	@Override
-	public void onClickAPSelectorRescan() {
-		// TODO Auto-generated method stub
-		cmanager.discoverTeamService();
-	}
 }

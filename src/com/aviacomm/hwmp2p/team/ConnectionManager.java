@@ -34,7 +34,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class ConnectionManager implements GroupInfoListener {
-	ConnectionListener listener;
+	ConnectionManagerListener listener;
 	public static boolean backupAp = false;
 	private Channel mChannel;
 	private WifiP2pManager mWifiP2pManager;
@@ -60,7 +60,7 @@ public class ConnectionManager implements GroupInfoListener {
 	public int SERVER_PORT;
 	public String nickname;
 
-	public ConnectionManager(Activity activity, ConnectionListener listener,
+	public ConnectionManager(Activity activity, ConnectionManagerListener listener,
 			Handler handler) {
 		this.mainActivity = activity;
 		this.listener = listener;
@@ -131,7 +131,7 @@ public class ConnectionManager implements GroupInfoListener {
 		}
 	}
 
-	public void connect(WifiP2pDevice srcDevice, String gsignal) {
+	public void connect(MWifiDirectAP ap) {
 
 	}
 
@@ -237,11 +237,10 @@ public class ConnectionManager implements GroupInfoListener {
 	private void onConnectionBreaken() {
 
 	}
-
-	public interface ConnectionListener {
-		public void onConnectionEstablished();
-
-		public void onConnectionFailed();
+/*一般不用接口，因为不一定在主线程调用，通常采用handler发消息的方式
+ */
+	public interface ConnectionManagerListener {
+		public void onInvokeConnectionEvent(int eventId,Object obj);
 	}
 
 	private class WiFiDirectBroadcastReceiver extends BroadcastReceiver {

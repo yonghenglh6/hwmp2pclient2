@@ -24,18 +24,22 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class APSelectorFragment extends Fragment implements Callback {
 	private View view;
 	Button connect;
 	Button cancel;
+	Button rescan;
 	RadioGroup apgroup;
 	Context context;
 	Handler apselectorHandler = new Handler(this);
+	ApSelectorListener listener;
 
-	public APSelectorFragment(Context context,ApSelectorListener ap) {
+	public APSelectorFragment(Context context, ApSelectorListener listener) {
 		super();
 		this.context = context;
+		this.listener = listener;
 	}
 
 	@Override
@@ -43,20 +47,53 @@ public class APSelectorFragment extends Fragment implements Callback {
 			Bundle savedInstanceState) {
 		view = inflater
 				.inflate(R.layout.fragment_ap_selector, container, false);
-		connect = (Button) view.findViewById(R.id.apselector_connect);
-		connect = (Button) view.findViewById(R.id.apselector_cancel);
 		apgroup = (RadioGroup) view.findViewById(R.id.apGroup);
+		connect = (Button) view.findViewById(R.id.apselector_connect);
+		connect.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				View selectedButton = apgroup.findViewById(apgroup
+						.getCheckedRadioButtonId());
+				if (selectedButton instanceof MAPRadioButton) {
+					listener.onClickAPSelectorButton(
+							ApSelectorListener.BUTTON_CONNECT, null);
+				}else{
+					Toast.makeText(context, "Please check One AP!", Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
+		cancel = (Button) view.findViewById(R.id.apselector_cancel);
+		cancel.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				listener.onClickAPSelectorButton(
+						ApSelectorListener.BUTTON_CANCEL, null);
+			}
+		});
+		rescan = (Button) view.findViewById(R.id.apselector_rescan);
+		rescan.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				listener.onClickAPSelectorButton(
+						ApSelectorListener.BUTTON_RESCAN, null);
+			}
+		});
+
 		return view;
 	}
 
 	public Handler getHandler() {
 		return apselectorHandler;
 	}
-	public interface ApSelectorListener{
-		public void onClickAPSelectorConnect(MWifiDirectAP ap);
-		public void onClickAPSelectorCancel();
-		public void onClickAPSelectorRescan();
+
+	public interface ApSelectorListener {
+		public static final int BUTTON_CONNECT = 1;
+		public static final int BUTTON_CANCEL = 2;
+		public static final int BUTTON_RESCAN = 3;
+
+		public void onClickAPSelectorButton(int but_id, Object obj);
 	}
+
 	public boolean handleMessage(Message msg) {
 		switch (msg.what) {
 		case MessageEnum.WIFIAPDISCOVED:

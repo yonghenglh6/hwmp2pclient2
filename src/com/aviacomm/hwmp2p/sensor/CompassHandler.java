@@ -17,7 +17,9 @@ import android.hardware.SensorEventListener;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-
+/*
+ * NOT USED FOR NOW! THIS USE THE TWO RECOMMENED SENSOR! BUT IT IS SO DIFFICULT TO HANDLE.
+ */
 public class CompassHandler implements SensorEventListener {
 	static int state;
 	private final int RUN = 1;

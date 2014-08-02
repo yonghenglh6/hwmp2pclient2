@@ -51,7 +51,7 @@ public class MainPageFragment extends Fragment {
 		back=(ImageButton) view.findViewById(R.id.mainpage_back_button);
 		back.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
-				listener.onClickBack();
+				listener.onClickMainPageButton(MainPageListener.BUTTON_BACK, null);
 			}
 		});
 		wifi_intensity=(ImageView) view.findViewById(R.id.wifiIntensity);
@@ -60,13 +60,13 @@ public class MainPageFragment extends Fragment {
 		scan.setOnClickListener(new OnClickListener() {	
 			@Override
 			public void onClick(View arg0) {
-				listener.onClickScan();
+				listener.onClickMainPageButton(MainPageListener.BUTTON_SCAN, null);
 			}
 		});
 		createTeam.setOnClickListener(new OnClickListener() {	
 			@Override
 			public void onClick(View arg0) {
-				listener.onClickCreateTeam();
+				listener.onClickMainPageButton(MainPageListener.BUTTON_CREATETEAM, null);
 			}
 		});
 //		wifi_intensity.setImageResource(R.drawable.wifi_intensity_levellist);
@@ -96,8 +96,9 @@ public class MainPageFragment extends Fragment {
 		}
 	}
     public interface MainPageListener {
-        public void onClickBack();
-        public void onClickScan();
-        public void onClickCreateTeam();
+		public static final int BUTTON_BACK = 1;
+		public static final int BUTTON_SCAN = 2;
+		public static final int BUTTON_CREATETEAM = 3;
+    	public void onClickMainPageButton(int buttonId,Object obj);
     }
 }
