@@ -5,7 +5,9 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ProgressBar;
-
+/*
+ * NOT USED FOR NOW 
+ */
 public class BatteryView extends ProgressBar {
 	public BatteryView(Context context, AttributeSet attrs){
 		super(context,attrs);

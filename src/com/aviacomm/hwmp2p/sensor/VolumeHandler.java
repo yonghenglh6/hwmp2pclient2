@@ -10,7 +10,9 @@ import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.os.BatteryManager;
 import android.os.Handler;
-
+/*
+ * This is desperate!!!!!!!!         It should be gotten when the UI show;
+ */
 public class VolumeHandler implements Runnable {
 	Handler handler;
 	static int state;
@@ -43,8 +45,8 @@ public class VolumeHandler implements Runnable {
 		AudioManager mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 		while(state==RUN){
 			try {			
-			    int max = mAudioManager.getStreamMaxVolume( AudioManager.STREAM_RING  ); 
-			    int current = mAudioManager.getStreamVolume( AudioManager.STREAM_RING  ); 
+			    int max = mAudioManager.getStreamMaxVolume( AudioManager.STREAM_MUSIC ); 
+			    int current = mAudioManager.getStreamVolume( AudioManager.STREAM_MUSIC  ); 
 			    int level = current * 100 / max;
 				handler.obtainMessage(MessageEnum.VOLUMECHANGE, level, 0)
 				.sendToTarget();

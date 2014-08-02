@@ -2,10 +2,8 @@
 <AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/AbsoluteLayout1"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" 
-        android:background="@color/MainPageBackgroundColor"
-    >
-    
+    android:layout_height="match_parent"
+    android:background="@color/MainPageBackgroundColor" >
 
     <ImageButton
         android:id="@+id/mainpage_back_button"
@@ -27,7 +25,7 @@
         android:progressDrawable="@drawable/progressbar_battery" />
 
     <LinearLayout
-        android:layout_width="132dp"
+        android:layout_width="164dp"
         android:layout_height="93dp"
         android:layout_x="5dp"
         android:layout_y="187dp" >
@@ -47,6 +45,32 @@
             android:max="100"
             android:progress="20"
             android:progressDrawable="@drawable/progressbar_volume" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/button_incvolume"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@color/RED"
+                android:text="inc" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="25dp" />
+
+            <Button
+                android:id="@+id/button_decvolume"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                 android:background="@color/BLUE"
+                android:text="dec" />
+        </LinearLayout>
     </LinearLayout>
 
     <Button
@@ -73,14 +97,6 @@
             android:src="@drawable/compass_pointer" />
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/apselector_cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_x="164dp"
-        android:layout_y="209dp"
-        android:text="SCAN" />
-
     <ImageView
         android:id="@+id/wifiIntensity"
         android:layout_width="wrap_content"
@@ -88,5 +104,13 @@
         android:layout_x="216dp"
         android:layout_y="48dp"
         android:src="@drawable/wifi_intensity_levellist" />
+
+    <Button
+        android:id="@+id/apselector_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="206dp"
+        android:layout_y="202dp"
+        android:text="SCAN" />
 
 </AbsoluteLayout>

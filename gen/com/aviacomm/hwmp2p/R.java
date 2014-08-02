@@ -11,7 +11,10 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
+        public static final int BLUE=0x7f060004;
+        public static final int GREEN=0x7f060003;
         public static final int MainPageBackgroundColor=0x7f060001;
+        public static final int RED=0x7f060002;
         public static final int StartPageBackgroundColor=0x7f060000;
     }
     public static final class drawable {
@@ -30,37 +33,40 @@ public final class R {
         public static final int startpage_connect=0x7f02000c;
         public static final int startpage_settings=0x7f02000d;
         public static final int startpage_title=0x7f02000e;
-        public static final int volume_lable=0x7f02000f;
-        public static final int wifi_intensity_0=0x7f020010;
-        public static final int wifi_intensity_1=0x7f020011;
-        public static final int wifi_intensity_2=0x7f020012;
-        public static final int wifi_intensity_3=0x7f020013;
-        public static final int wifi_intensity_4=0x7f020014;
-        public static final int wifi_intensity_levellist=0x7f020015;
+        public static final int volume_icon=0x7f02000f;
+        public static final int volume_lable=0x7f020010;
+        public static final int wifi_intensity_0=0x7f020011;
+        public static final int wifi_intensity_1=0x7f020012;
+        public static final int wifi_intensity_2=0x7f020013;
+        public static final int wifi_intensity_3=0x7f020014;
+        public static final int wifi_intensity_4=0x7f020015;
+        public static final int wifi_intensity_levellist=0x7f020016;
     }
     public static final class id {
         public static final int AbsoluteLayout1=0x7f07000c;
         public static final int LinearLayout1=0x7f070005;
-        public static final int RelativeLayout1=0x7f070011;
+        public static final int RelativeLayout1=0x7f070013;
         public static final int actionContent=0x7f070002;
         public static final int apGroup=0x7f070006;
         public static final int apselector_cancel=0x7f07000a;
         public static final int apselector_connect=0x7f070009;
         public static final int apselector_rescan=0x7f07000b;
         public static final int batteryProgressBar=0x7f07000e;
-        public static final int compass_pointer=0x7f070012;
+        public static final int button_decvolume=0x7f070012;
+        public static final int button_incvolume=0x7f070011;
+        public static final int compass_pointer=0x7f070014;
         public static final int displayContent=0x7f070001;
         public static final int imageView1=0x7f07000f;
         public static final int mainpage_back_button=0x7f07000d;
         public static final int radio0=0x7f070007;
         public static final int rootContent=0x7f070000;
         public static final int scrollView1=0x7f070003;
-        public static final int startpage_connect_button=0x7f070014;
-        public static final int startpage_settings_button=0x7f070015;
+        public static final int startpage_connect_button=0x7f070016;
+        public static final int startpage_settings_button=0x7f070017;
         public static final int stateText=0x7f070004;
         public static final int textView1=0x7f070008;
         public static final int volumeProgressBar=0x7f070010;
-        public static final int wifiIntensity=0x7f070013;
+        public static final int wifiIntensity=0x7f070015;
     }
     public static final class layout {
         public static final int activity_hwmp2_pclient=0x7f030000;
@@ -83,11 +89,13 @@ public final class R {
         /** 
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+
     
 
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
+
         
 
         Base application theme for API 11+. This theme completely replaces

@@ -28,7 +28,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
+/*
+ * 主程序，用来和
+ */
 public class HWMP2PClient extends Activity implements
 		ConnectionManager.ConnectionManagerListener, Handler.Callback,
 		MainPageListener, ApSelectorListener {

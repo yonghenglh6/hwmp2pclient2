@@ -60,8 +60,8 @@ public class ConnectionManager implements GroupInfoListener {
 	public int SERVER_PORT;
 	public String nickname;
 
-	public ConnectionManager(Activity activity, ConnectionManagerListener listener,
-			Handler handler) {
+	public ConnectionManager(Activity activity,
+			ConnectionManagerListener listener, Handler handler) {
 		this.mainActivity = activity;
 		this.listener = listener;
 		this.handler = handler;
@@ -82,8 +82,8 @@ public class ConnectionManager implements GroupInfoListener {
 			public void onDnsSdServiceAvailable(String instanceName,
 					String registrationType, WifiP2pDevice srcDevice) {
 				// A service has been discovered. Is this our app?
+				Log.i(TAG, "ServiceInstance Found");
 				if (instanceName.equalsIgnoreCase(INSTANCENAME)) {
-					Log.i(TAG, "ServiceInstance Found");
 					MWifiDirectAP ap = MWifiDirectAP.getInstance(srcDevice,
 							registrationType);
 					checkForList(ap);
@@ -104,7 +104,6 @@ public class ConnectionManager implements GroupInfoListener {
 		};
 		mWifiP2pManager.setDnsSdResponseListeners(mChannel,
 				dnsSdServiceResponseListener, dnsSdTxtRecordListener);
-
 	}
 
 	// when found a device,check if stored before, if not ,add it to aplist
@@ -140,32 +139,38 @@ public class ConnectionManager implements GroupInfoListener {
 	}
 
 	public void discoverTeamService() {
-		
-		if(serviceRequest!=null)
-			mWifiP2pManager.removeServiceRequest(mChannel, serviceRequest, new ActionListener() {
-				@Override
-				public void onSuccess() {
-					Log.i(TAG,"removeRequest");
-				}
-				@Override
-				public void onFailure(int arg0) {
-					Log.i(TAG,"removeRequest Failed"+WifiDirectConnectionUitl.transferWifiDeviceStatus(arg0));
-				}
-			});
+
+		if (serviceRequest != null)
+			mWifiP2pManager.removeServiceRequest(mChannel, serviceRequest,
+					new ActionListener() {
+						@Override
+						public void onSuccess() {
+							Log.i(TAG, "removeRequest");
+						}
+
+						@Override
+						public void onFailure(int arg0) {
+							Log.i(TAG,
+									"removeRequest Failed"
+											+ WifiDirectConnectionUitl
+													.transferWifiDeviceStatus(arg0));
+						}
+					});
 		serviceRequest = WifiP2pDnsSdServiceRequest.newInstance();
 		mWifiP2pManager.addServiceRequest(mChannel, serviceRequest,
 				new ActionListener() {
 					@Override
 					public void onSuccess() {
 						// Success!
-						Log.i(TAG, "Add request OK");
+						Log.i(TAG, "Add Service request OK");
 					}
+
 					@Override
 					public void onFailure(int code) {
 						// Command failed. Check for P2P_UNSUPPORTED, ERROR, or
 						// BUSY
 						Log.i(TAG,
-								"Add request Wrong"
+								"Add Service request Wrong"
 										+ WifiDirectConnectionUitl
 												.transferWifiDeviceStatus(code));
 					}
@@ -174,14 +179,14 @@ public class ConnectionManager implements GroupInfoListener {
 			@Override
 			public void onSuccess() {
 				// Success!
-				Log.i(TAG, "Discover ap OK");
+				Log.i(TAG, "StartDiscover ap OK");
 			}
 
 			@Override
 			public void onFailure(int code) {
 				// Command failed. Check for P2P_UNSUPPORTED, ERROR, or BUSY
 				Log.i(TAG,
-						"Discover ap Wrong"
+						"StartDiscover ap Wrong"
 								+ WifiDirectConnectionUitl
 										.transferWifiDeviceStatus(code));
 			}
@@ -217,13 +222,13 @@ public class ConnectionManager implements GroupInfoListener {
 				new ActionListener() {
 					@Override
 					public void onSuccess() {
-						Log.i(TAG, "CreateTeamService OK");
+						Log.i(TAG, "Create TeamService OK");
 					}
 
 					@Override
 					public void onFailure(int error) {
 						Log.i(TAG,
-								"CreateTeamService Wrong:"
+								"Create TeamService Wrong:"
 										+ WifiDirectConnectionUitl
 												.transferWifiDeviceStatus(error));
 					}
@@ -237,10 +242,12 @@ public class ConnectionManager implements GroupInfoListener {
 	private void onConnectionBreaken() {
 
 	}
-/*一般不用接口，因为不一定在主线程调用，通常采用handler发消息的方式
- */
+
+	/*
+	 * 一般不用接口，因为不一定在主线程调用，通常采用handler发消息的方式
+	 */
 	public interface ConnectionManagerListener {
-		public void onInvokeConnectionEvent(int eventId,Object obj);
+		public void onInvokeConnectionEvent(int eventId, Object obj);
 	}
 
 	private class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
@@ -283,9 +290,11 @@ public class ConnectionManager implements GroupInfoListener {
 				}
 				mLastGroupFormed = wifip2pinfo.groupFormed;
 				if (networkInfo.isConnected()) {
+					onConnectionEstablished();
 					Log.d(TAG, "Connected");
 				} else if (mLastGroupFormed != true) {
 					// we are disconnected
+					onConnectionBreaken();
 					Log.d(TAG, "Disconnected");
 				}
 			} else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION
@@ -309,28 +318,6 @@ public class ConnectionManager implements GroupInfoListener {
 				}
 			}
 		}
-		/*
-		 * @Override public void onReceive(Context context, Intent intent) { //
-		 * TODO Auto-generated method stub String action = intent.getAction();
-		 * 
-		 * if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION
-		 * .equals(action)) { NetworkInfo networkInfo = (NetworkInfo) intent
-		 * .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
-		 * 
-		 * if (networkInfo.isConnected()) { // we are connected with the other
-		 * device, request // connection // info to find group owner IP //
-		 * Log.d(Wd250Demo.TAG, //
-		 * "Connected to p2p network. Requesting network details"); //
-		 * manager.requestConnectionInfo(); //
-		 * manager.requestConnectionInfo(channel, // (ConnectionInfoListener)
-		 * activity); onConnectionEstablished(); } else { // It's a disconnect
-		 * // manager.disconnect(); onConnectionBreaken(); } } else if
-		 * (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION .equals(action))
-		 * { WifiP2pDevice device = (WifiP2pDevice) intent
-		 * .getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
-		 * HWMP2PClient.log.i(TAG, "My P2P Status is" +
-		 * WifiDirectUitl.transferWifiDeviceStatus(device.status)); } }
-		 */
 	}
 
 	public static class MWifiDirectAP {
@@ -370,11 +357,12 @@ public class ConnectionManager implements GroupInfoListener {
 					listenPort, null, RECORDFOUND);
 		}
 
-		// return 1 if become comlete from incomlete
-		// update INFO from another return 0
-		// return -1 if deviceaddress is not same
+		/*
+		 * return 1 if become complete from incomplete update INFO from another
+		 * return 0 return -1 if device address is not same
+		 */
 		public int Combine(MWifiDirectAP another) {
-			int isCompletion = 0;
+			int isComplete = 0;
 			if (!device.deviceAddress.equals(another.device.deviceAddress))
 				return -1;
 
@@ -388,10 +376,10 @@ public class ConnectionManager implements GroupInfoListener {
 			}
 			if (infoCompletion + another.infoCompletion == RECORDFOUND
 					+ REGISTERTYPEFOUND) {
-				isCompletion = 1;
+				isComplete = 1;
 				infoCompletion = RECORDFOUND + REGISTERTYPEFOUND;
 			}
-			return isCompletion;
+			return isComplete;
 		}
 		/*
 		 * @Override public boolean equals(Object o) { return

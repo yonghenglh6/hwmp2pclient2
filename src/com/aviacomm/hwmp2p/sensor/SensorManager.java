@@ -14,13 +14,13 @@ public class SensorManager {
 		this.handler=handler;
 		this.context=context;
 		batteryhandler=new BatteryHandler(context,handler);
-		volumehandler=new VolumeHandler(context, handler);
+//		volumehandler=new VolumeHandler(context, handler);
 		compasshandler=new CompassHandler2(context, handler);
 		wfiIntensityHandler=new WifiIntensityHandler(context, handler);
 	}
 	public void startall(){
 		batteryhandler.start();
-		volumehandler.start();
+//		volumehandler.start();
 		compasshandler.start();
 		wfiIntensityHandler.start();
 	}
