@@ -33,7 +33,7 @@ public class APSelectorFragment extends Fragment implements Callback {
 	Context context;
 	Handler apselectorHandler = new Handler(this);
 
-	public APSelectorFragment(Context context) {
+	public APSelectorFragment(Context context,ApSelectorListener ap) {
 		super();
 		this.context = context;
 	}
@@ -71,7 +71,6 @@ public class APSelectorFragment extends Fragment implements Callback {
 
 	public class MAPRadioButton extends RadioButton {
 		MWifiDirectAP ap;
-
 		public MAPRadioButton(Context context, MWifiDirectAP ap) {
 			super(context);
 			this.ap = ap;

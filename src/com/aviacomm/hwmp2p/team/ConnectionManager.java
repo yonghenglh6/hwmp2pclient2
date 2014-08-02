@@ -104,22 +104,6 @@ public class ConnectionManager implements GroupInfoListener {
 		};
 		mWifiP2pManager.setDnsSdResponseListeners(mChannel,
 				dnsSdServiceResponseListener, dnsSdTxtRecordListener);
-		serviceRequest = WifiP2pDnsSdServiceRequest.newInstance();
-		mWifiP2pManager.addServiceRequest(mChannel, serviceRequest,
-				new ActionListener() {
-					@Override
-					public void onSuccess() {
-						// Success!
-						Log.i(TAG,"Add request OK");
-					}
-
-					@Override
-					public void onFailure(int code) {
-						// Command failed. Check for P2P_UNSUPPORTED, ERROR, or
-						// BUSY
-						Log.i(TAG,"Add request Wrong"+WifiDirectConnectionUitl.transferWifiDeviceStatus(code));
-					}
-				});
 
 	}
 
@@ -156,21 +140,52 @@ public class ConnectionManager implements GroupInfoListener {
 	}
 
 	public void discoverTeamService() {
+		
+		if(serviceRequest!=null)
+			mWifiP2pManager.removeServiceRequest(mChannel, serviceRequest, new ActionListener() {
+				@Override
+				public void onSuccess() {
+					Log.i(TAG,"removeRequest");
+				}
+				@Override
+				public void onFailure(int arg0) {
+					Log.i(TAG,"removeRequest Failed"+WifiDirectConnectionUitl.transferWifiDeviceStatus(arg0));
+				}
+			});
+		serviceRequest = WifiP2pDnsSdServiceRequest.newInstance();
+		mWifiP2pManager.addServiceRequest(mChannel, serviceRequest,
+				new ActionListener() {
+					@Override
+					public void onSuccess() {
+						// Success!
+						Log.i(TAG, "Add request OK");
+					}
+					@Override
+					public void onFailure(int code) {
+						// Command failed. Check for P2P_UNSUPPORTED, ERROR, or
+						// BUSY
+						Log.i(TAG,
+								"Add request Wrong"
+										+ WifiDirectConnectionUitl
+												.transferWifiDeviceStatus(code));
+					}
+				});
+		mWifiP2pManager.discoverServices(mChannel, new ActionListener() {
+			@Override
+			public void onSuccess() {
+				// Success!
+				Log.i(TAG, "Discover ap OK");
+			}
 
-        mWifiP2pManager.discoverServices(mChannel, new ActionListener() {
-
-            @Override
-            public void onSuccess() {
-                // Success!
-            	Log.i(TAG,"Discover ap OK");
-            }
-
-            @Override
-            public void onFailure(int code) {
-                // Command failed.  Check for P2P_UNSUPPORTED, ERROR, or BUSY
-            	Log.i(TAG,"Discover ap Wrong"+WifiDirectConnectionUitl.transferWifiDeviceStatus(code));
-            }
-        });
+			@Override
+			public void onFailure(int code) {
+				// Command failed. Check for P2P_UNSUPPORTED, ERROR, or BUSY
+				Log.i(TAG,
+						"Discover ap Wrong"
+								+ WifiDirectConnectionUitl
+										.transferWifiDeviceStatus(code));
+			}
+		});
 	}
 
 	public void createTeamService() {

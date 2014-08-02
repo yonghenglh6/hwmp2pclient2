@@ -62,7 +62,7 @@ public class HWMP2PClient extends Activity implements
 		mainpageFragment = new MainPageFragment(cmanager, this);
 		displaypageFragment = new DisplayPageFragment(this);
 		actionpageFragment = new ActionPageFragment(this);
-		apSelectorFragment=new APSelectorFragment(this);
+		apSelectorFragment=new APSelectorFragment(this,this);
 		
 		rootContent = (ViewGroup) findViewById(R.id.rootContent);
 		showSingleFragmentInRootContent(mainpageFragment);
@@ -148,7 +148,6 @@ public class HWMP2PClient extends Activity implements
 	@Override
 	public void onClickCreateTeam() {
 		cmanager.createTeamService();
-		
 	}
 
 	@Override
