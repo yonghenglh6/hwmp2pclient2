@@ -36,7 +36,10 @@ import android.util.Log;
 import android.widget.Toast;
 
 /*
- * This manages the P2P connections.
+ * This manages the Lower P2P connections.
+ * In the future, this class will become a member of TeamManager.
+ * and the main activity will not hold this but TeamManager.
+ * 
  */
 public class ConnectionManager implements GroupInfoListener {
 	ConnectionManagerListener listener;
