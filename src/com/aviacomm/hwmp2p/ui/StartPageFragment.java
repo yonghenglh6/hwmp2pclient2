@@ -16,7 +16,10 @@ import android.webkit.WebView.FindListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-
+/*
+ * Discarded for now!
+ * It appeared in "HWM P2P (Client27).pdf", disappeared in "HWM P2P GUI Description 7-24.pdf"
+ */
 public class StartPageFragment extends Fragment {
 	private View view;
 	StartPageListener listener;

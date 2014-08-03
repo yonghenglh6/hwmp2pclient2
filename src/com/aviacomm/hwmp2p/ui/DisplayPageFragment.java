@@ -18,7 +18,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-
+/*
+ * Section Two:Display Section
+ */
 public class DisplayPageFragment extends Fragment {
 	View view;
 	Context context;

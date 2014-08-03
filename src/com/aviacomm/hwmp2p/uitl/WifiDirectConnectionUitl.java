@@ -5,10 +5,12 @@ import java.net.Socket;
 import java.util.Random;
 
 import android.net.wifi.p2p.WifiP2pManager;
-
+/*
+ * Some tools
+ */
 public class WifiDirectConnectionUitl {
 	public static final int SERVERPORT=5198;
-	public static String transferWifiDeviceStatus(int status){
+	public static String errorStateToString(int status){
 		if(status==WifiP2pManager.BUSY)
 			return "BUSY";
 		if(status==WifiP2pManager.ERROR)

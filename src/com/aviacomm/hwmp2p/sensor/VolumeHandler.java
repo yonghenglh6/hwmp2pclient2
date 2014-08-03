@@ -11,7 +11,8 @@ import android.media.AudioManager;
 import android.os.BatteryManager;
 import android.os.Handler;
 /*
- * This is desperate!!!!!!!!         It should be gotten when the UI show;
+ * This is discarded!!!!!!!!         
+ * It should be gotten when the UI show;
  */
 public class VolumeHandler implements Runnable {
 	Handler handler;

@@ -8,7 +8,11 @@ import android.content.Context;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
-
+/*
+ * This is for getting wifi rssi.
+ * But it is not right.
+ * The real rssi for p2p needs upper communication which will be done later.
+ */
 public class WifiIntensityHandler extends CommonSingleCircleThread{
 	Handler handler;
 	Context context;

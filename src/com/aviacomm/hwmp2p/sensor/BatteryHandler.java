@@ -9,7 +9,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
 import android.os.Handler;
-
+/*
+ * Responsible for obtaining battery information.
+ * It will be move to Battery View in the future.
+ */
 public class BatteryHandler {
 	Handler handler;
 	static int state;

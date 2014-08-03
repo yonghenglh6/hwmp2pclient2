@@ -19,7 +19,7 @@ import android.util.Log;
 import android.view.View;
 
 /*
- * THIS IS WHAT'S USED NOW! BUT IT WILL BE REPLEACED BY CompassHandler IN THE FUTURE!
+ * IT WILL BE REPLEACED BY CompassHandler IN THE FUTURE!
  */
 public class CompassHandler2 implements SensorEventListener {
 	static int state;

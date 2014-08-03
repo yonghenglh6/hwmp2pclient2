@@ -9,6 +9,7 @@ import com.aviacomm.hwmp2p.team.ConnectionManager.MWifiDirectAP;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Handler.Callback;
@@ -25,7 +26,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
+/*
+ * Wireless connection AP select page.
+ */
 public class APSelectorFragment extends Fragment implements Callback {
 	private View view;
 	Button connect;
@@ -56,7 +59,7 @@ public class APSelectorFragment extends Fragment implements Callback {
 						.getCheckedRadioButtonId());
 				if (selectedButton instanceof MAPRadioButton) {
 					listener.onClickAPSelectorButton(
-							ApSelectorListener.BUTTON_CONNECT, null);
+							ApSelectorListener.BUTTON_CONNECT, ((MAPRadioButton)selectedButton).getAp());
 				}else{
 					Toast.makeText(context, "Please check One AP!", Toast.LENGTH_SHORT).show();
 				}
@@ -105,7 +108,7 @@ public class APSelectorFragment extends Fragment implements Callback {
 		}
 		return false;
 	}
-
+	
 	public class MAPRadioButton extends RadioButton {
 		MWifiDirectAP ap;
 		public MAPRadioButton(Context context, MWifiDirectAP ap) {
@@ -113,7 +116,6 @@ public class APSelectorFragment extends Fragment implements Callback {
 			this.ap = ap;
 			this.setText(ap.device.deviceName);
 		}
-
 		public MWifiDirectAP getAp() {
 			return ap;
 		}

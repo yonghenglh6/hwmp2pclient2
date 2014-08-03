@@ -18,7 +18,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-
+/*
+ * Section Three: Action Section
+ */
 public class ActionPageFragment extends Fragment {
 	View view;
 	Context context;

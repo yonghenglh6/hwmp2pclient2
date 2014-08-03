@@ -5,7 +5,9 @@ import android.media.AudioManager;
 import android.os.Handler;
 
 import com.aviacomm.hwmp2p.MessageEnum;
-
+/*
+ * This is a loop thread for reducing code amount
+ */
 public class CommonSingleCircleThread implements Runnable{	
 	static int state;
 	private final int RUN = 1;

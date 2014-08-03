@@ -3,6 +3,10 @@ package com.aviacomm.hwmp2p.sensor;
 import android.content.Context;
 import android.os.Handler;
 
+/*
+ * Most monitors for display section panel.
+ * We collect them to here for convenience to debug.
+ */
 public class SensorManager {
 	Context context;
 	Handler handler;

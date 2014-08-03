@@ -18,7 +18,9 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 /*
- * NOT USED FOR NOW! THIS USE THE TWO RECOMMENED SENSOR! BUT IT IS SO DIFFICULT TO HANDLE.
+ * NOT USED FOR NOW! THIS USE THE TWO RECOMMENED SENSOR(ACCELEROMETER and MAGNETIC_FIELD)! BUT IT IS SO DIFFICULT TO HANDLE.
+ * So temporarily we use ORIENTATION Sensor, which is deprecated now.
+ * This will be debugged and used later!
  */
 public class CompassHandler implements SensorEventListener {
 	static int state;

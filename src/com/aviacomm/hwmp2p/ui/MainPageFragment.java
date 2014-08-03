@@ -22,6 +22,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+/*
+ * Section one:
+ * Icon Section
+ */
 public class MainPageFragment extends Fragment {
 	public final String TAG="MainPageFragment";
 	View view;

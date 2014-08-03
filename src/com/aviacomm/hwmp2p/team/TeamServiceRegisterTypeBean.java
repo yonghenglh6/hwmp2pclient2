@@ -1,7 +1,10 @@
 package com.aviacomm.hwmp2p.team;
 
 import java.util.Random;
-
+/*
+ * NOT　USED!
+ * This may be used if text record not worked well。But it is NOT　USED for now;
+ */
 public class TeamServiceRegisterTypeBean {
 	public String action = "";
 	public String gsignal = "";

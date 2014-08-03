@@ -28,8 +28,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 /*
- * 主程序，用来和
+ * MainActivity. 
+ * Respond to most UI interaction of user from the fragments, and hand out the message from other threads to the fragments.
  */
 public class HWMP2PClient extends Activity implements
 		ConnectionManager.ConnectionManagerListener, Handler.Callback,

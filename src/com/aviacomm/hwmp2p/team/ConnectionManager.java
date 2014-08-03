@@ -17,6 +17,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.NetworkInfo;
+import android.net.wifi.WpsInfo;
+import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pGroup;
 import android.net.wifi.p2p.WifiP2pInfo;
@@ -32,7 +34,9 @@ import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceRequest;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
-
+/*
+ * This manages the P2P connections.
+ */
 public class ConnectionManager implements GroupInfoListener {
 	ConnectionManagerListener listener;
 	public static boolean backupAp = false;
@@ -46,11 +50,10 @@ public class ConnectionManager implements GroupInfoListener {
 	private DnsSdServiceResponseListener dnsSdServiceResponseListener;
 	private DnsSdTxtRecordListener dnsSdTxtRecordListener;
 	public final String TAG = "ConnectionManager";
-	public final String INSTANCENAME = "HWMP2P";
-	public final String REGISTIONTYPE = "HWMP2P";
+	public final String INSTANCENAME = "hwmp2p";
+	public final String REGISTIONTYPE = "_presence._tcp";
 	Handler handler;
 	List<MWifiDirectAP> aplist;
-	WifiP2pDnsSdServiceRequest serviceRequest;
 	private boolean mWifiP2pEnabled;
 	private boolean mWifiP2pSearching;
 	private int mConnectedDevices;
@@ -117,21 +120,42 @@ public class ConnectionManager implements GroupInfoListener {
 					break;
 				}
 			}
-			if (ori == null)
+			if (ori == null){
+				//first find the device
 				aplist.add(ap);
+				Log.i(TAG,"A new device address:"+ap.device.deviceAddress);
+				handler.obtainMessage(MessageEnum.WIFIAPDISCOVED, ap)
+				.sendToTarget();
+			}
 			else {
 				int state = ori.Combine(ap);
 				if (state == 1) {
-					// An ap should be listed!
-					handler.obtainMessage(MessageEnum.WIFIAPDISCOVED, ori)
-							.sendToTarget();
+					// An ap's info is complete! should be listed!
+					//TODO
 				}
 			}
 		}
 	}
 
 	public void connect(MWifiDirectAP ap) {
-
+		Log.i(TAG,"Invite :"+ap.device.deviceAddress);
+		teamManager.onConnectToTeam(ap);
+    	WifiP2pConfig config;
+    	config=new WifiP2pConfig();
+    	config.deviceAddress=ap.device.deviceAddress;
+    	config.wps.setup=WpsInfo.PBC;
+    	config.groupOwnerIntent=0;
+    	mWifiP2pManager.connect(mChannel, config, new ActionListener(){
+			@Override
+			public void onFailure(int arg0) {
+				Log.i(TAG,"Invitation is failure because of "+WifiDirectConnectionUitl.errorStateToString(arg0));
+			}
+			@Override
+			public void onSuccess() {
+				Log.i(TAG,"Invitation is ok!");
+			}
+    	});
+    	Log.i(TAG,"beginConnect");
 	}
 
 	public boolean isConnected() {
@@ -139,24 +163,18 @@ public class ConnectionManager implements GroupInfoListener {
 	}
 
 	public void discoverTeamService() {
-
-		if (serviceRequest != null)
-			mWifiP2pManager.removeServiceRequest(mChannel, serviceRequest,
-					new ActionListener() {
-						@Override
-						public void onSuccess() {
-							Log.i(TAG, "removeRequest");
-						}
-
-						@Override
-						public void onFailure(int arg0) {
-							Log.i(TAG,
-									"removeRequest Failed"
-											+ WifiDirectConnectionUitl
-													.transferWifiDeviceStatus(arg0));
-						}
-					});
-		serviceRequest = WifiP2pDnsSdServiceRequest.newInstance();
+		/*
+		 * if (serviceRequest != null)
+		 * mWifiP2pManager.removeServiceRequest(mChannel, serviceRequest, new
+		 * ActionListener() {
+		 * 
+		 * @Override public void onSuccess() { Log.i(TAG, "removeRequest"); }
+		 * 
+		 * @Override public void onFailure(int arg0) { Log.i(TAG,
+		 * "removeRequest Failed" + WifiDirectConnectionUitl
+		 * .transferWifiDeviceStatus(arg0)); } });
+		 */
+		WifiP2pDnsSdServiceRequest serviceRequest = WifiP2pDnsSdServiceRequest.newInstance();
 		mWifiP2pManager.addServiceRequest(mChannel, serviceRequest,
 				new ActionListener() {
 					@Override
@@ -172,7 +190,7 @@ public class ConnectionManager implements GroupInfoListener {
 						Log.i(TAG,
 								"Add Service request Wrong"
 										+ WifiDirectConnectionUitl
-												.transferWifiDeviceStatus(code));
+												.errorStateToString(code));
 					}
 				});
 		mWifiP2pManager.discoverServices(mChannel, new ActionListener() {
@@ -188,7 +206,7 @@ public class ConnectionManager implements GroupInfoListener {
 				Log.i(TAG,
 						"StartDiscover ap Wrong"
 								+ WifiDirectConnectionUitl
-										.transferWifiDeviceStatus(code));
+										.errorStateToString(code));
 			}
 		});
 	}
@@ -230,17 +248,17 @@ public class ConnectionManager implements GroupInfoListener {
 						Log.i(TAG,
 								"Create TeamService Wrong:"
 										+ WifiDirectConnectionUitl
-												.transferWifiDeviceStatus(error));
+												.errorStateToString(error));
 					}
 				});
 	}
 
 	private void onConnectionEstablished() {
-
+		HWMP2PClient.log.i(TAG,"Connection is Established!");
 	}
 
 	private void onConnectionBreaken() {
-
+		HWMP2PClient.log.i(TAG,"I'm Disconnected.");
 	}
 
 	/*
