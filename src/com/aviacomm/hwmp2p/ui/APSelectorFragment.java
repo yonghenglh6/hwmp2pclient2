@@ -77,6 +77,7 @@ public class APSelectorFragment extends Fragment implements Callback {
 		rescan.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
+				apgroup.removeAllViews();
 				listener.onClickAPSelectorButton(
 						ApSelectorListener.BUTTON_RESCAN, null);
 			}

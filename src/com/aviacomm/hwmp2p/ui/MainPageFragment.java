@@ -1,10 +1,13 @@
 package com.aviacomm.hwmp2p.ui;
 
+import com.aviacomm.hwmp2p.HWMP2PClient;
 import com.aviacomm.hwmp2p.MessageEnum;
 import com.aviacomm.hwmp2p.R;
 import com.aviacomm.hwmp2p.R.id;
 import com.aviacomm.hwmp2p.R.layout;
+import com.aviacomm.hwmp2p.sensor.MusicVolumeManager;
 import com.aviacomm.hwmp2p.team.ConnectionManager;
+import com.aviacomm.hwmp2p.team.WifiStateManager;
 import com.aviacomm.hwmp2p.ui.StartPageFragment.StartPageListener;
 
 import android.app.Fragment;
@@ -17,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.webkit.WebView.FindListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,11 +31,12 @@ import android.widget.ProgressBar;
  * Icon Section
  */
 public class MainPageFragment extends Fragment {
-	public final String TAG="MainPageFragment";
+	public final String TAG = "MainPageFragment";
 	View view;
 	ProgressBar battery;
 	ProgressBar volume;
 	ImageView compass_pointer;
+	ImageView connection_establish_indicator;
 	MainPageListener listener;
 	ConnectionManager cmanager;
 	ImageButton back;
@@ -40,7 +45,10 @@ public class MainPageFragment extends Fragment {
 	Button createTeam;
 	Button increaseVolume;
 	Button decreaseVolume;
+	Button resetwifi;
 	int currentStreamVolume = 0;
+	MusicVolumeManager musicVolumeManager;
+	WifiStateManager wifiStateManager;
 
 	public MainPageFragment(ConnectionManager cmanager,
 			MainPageListener listener) {
@@ -55,11 +63,19 @@ public class MainPageFragment extends Fragment {
 		view = inflater.inflate(R.layout.fragment_main, container, false);
 		// BatteryView bbiew=new BatteryView(this.getActivity(), null,
 		// TRIM_MEMORY_BACKGROUND);
-		initModule();
 		return view;
 	}
 
+	@Override
+	public void onStart() {
+		super.onStart();
+		initModule();
+	}
+
 	public void initModule() {
+
+		musicVolumeManager = new MusicVolumeManager(getActivity());
+		wifiStateManager = new WifiStateManager(getActivity());
 		battery = (ProgressBar) view.findViewById(R.id.batteryProgressBar);
 		volume = (ProgressBar) view.findViewById(R.id.volumeProgressBar);
 		compass_pointer = (ImageView) view.findViewById(R.id.compass_pointer);
@@ -70,11 +86,14 @@ public class MainPageFragment extends Fragment {
 						null);
 			}
 		});
+		connection_establish_indicator = (ImageView) view
+				.findViewById(R.id.mainpage_connection_establish_indicator);
 		wifi_intensity = (ImageView) view.findViewById(R.id.wifiIntensity);
-		scan = (Button) view.findViewById(R.id.apselector_cancel);
-		createTeam = (Button) view.findViewById(R.id.apselector_connect);
-		increaseVolume = (Button) view.findViewById(R.id.button_incvolume);
-		decreaseVolume = (Button) view.findViewById(R.id.button_decvolume);
+		scan = (Button) view.findViewById(R.id.mainpage_scan);
+		createTeam = (Button) view.findViewById(R.id.mainpage_createteam);
+		increaseVolume = (Button) view.findViewById(R.id.mainpage_incvolume);
+		decreaseVolume = (Button) view.findViewById(R.id.mainpage_decvolume);
+		resetwifi = (Button) view.findViewById(R.id.mainpage_resetwifi);
 		scan.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -92,42 +111,38 @@ public class MainPageFragment extends Fragment {
 		increaseVolume.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				AudioManager mAudioManager = (AudioManager) MainPageFragment.this
-						.getActivity().getSystemService(Context.AUDIO_SERVICE);
-				mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
-						AudioManager.ADJUST_RAISE,
-					0);
-				updateCurrentVolumeLevel();
+				musicVolumeManager.increaseVolume();
+				volume.setProgress(musicVolumeManager.getVolumeLevel());
 			}
 		});
 		decreaseVolume.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				AudioManager mAudioManager = (AudioManager) MainPageFragment.this
-						.getActivity().getSystemService(Context.AUDIO_SERVICE);
-				mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
-						AudioManager.ADJUST_LOWER,0);
-				updateCurrentVolumeLevel();
+				musicVolumeManager.decreaseVolume();
+				volume.setProgress(musicVolumeManager.getVolumeLevel());
+			}
+		});
+		resetwifi.setText(wifiStateManager.isWifiOn() ? "TurnOff WIFI"
+				: "TurnON WIFI");
+		resetwifi.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				wifiStateManager.resetWifi();
+				resetwifi.setText(wifiStateManager.isWifiOn() ? "TurnOff WIFI"
+						: "TurnON WIFI");
 			}
 		});
 		// wifi_intensity.setImageResource(R.drawable.wifi_intensity_levellist);
 		// wifi_intensity.setImageLevel(3);
 	}
 
-	private int updateCurrentVolumeLevel(){
-		AudioManager mAudioManager = (AudioManager) MainPageFragment.this
-				.getActivity().getSystemService(Context.AUDIO_SERVICE);
-		int max = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-		int current = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-		int level = current * 100 / max;
-		Log.i(TAG,"music volume is "+level);
-		volume.setProgress(level);
-		return level;
-	}
+	private boolean isConnectionEstablished = false;
+
 	@Override
 	public void onResume() {
 		super.onResume();
-		updateCurrentVolumeLevel();
+		volume.setProgress(musicVolumeManager.getVolumeLevel());
+		connection_establish_indicator.setAlpha(isConnectionEstablished?0f:1f);
 	}
 
 	public void handleMessage(Message msg) {
@@ -147,6 +162,19 @@ public class MainPageFragment extends Fragment {
 		case MessageEnum.WIFIINTENSITYCHANGE:
 			if (wifi_intensity != null)
 				wifi_intensity.setImageLevel(msg.arg1);
+			break;
+		case MessageEnum.CONNECTIONESTABLISHED:
+			if (connection_establish_indicator != null) {
+				isConnectionEstablished = true;
+				connection_establish_indicator.setAlpha(0f);
+				HWMP2PClient.log.i("it should be invisible");
+			}
+			break;
+		case MessageEnum.CONNECTIONBROKEN:
+			if (connection_establish_indicator != null) {
+				isConnectionEstablished = false;
+				connection_establish_indicator.setAlpha(1f);
+			}
 			break;
 		default:
 			break;

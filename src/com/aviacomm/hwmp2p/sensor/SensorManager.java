@@ -28,4 +28,10 @@ public class SensorManager {
 		compasshandler.start();
 		wfiIntensityHandler.start();
 	}
+	public void stopall(){
+		batteryhandler.stop();
+//		volumehandler.start();
+		compasshandler.stop();
+		wfiIntensityHandler.stop();
+	}
 }

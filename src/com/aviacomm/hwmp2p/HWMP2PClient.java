@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +51,7 @@ public class HWMP2PClient extends Activity implements
 	Fragment currentFragmentInRootContent;
 	APSelectorFragment apSelectorFragment;
 	TextView statusView;
+	SensorManager sensormanager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +62,7 @@ public class HWMP2PClient extends Activity implements
 		statusView = (TextView) this.findViewById(R.id.stateText);
 		cmanager = new ConnectionManager(this, this, handler);
 		cmanager.initial();
-		SensorManager sensormanager = new SensorManager(this, getHandler());
+		sensormanager = new SensorManager(this, getHandler());
 
 		// init three fragment in the main activity
 		mainpageFragment = new MainPageFragment(cmanager, this);
@@ -77,12 +79,14 @@ public class HWMP2PClient extends Activity implements
 
 		// start Sensor
 		// startpageFragment = new StartPageFragment(this);
-		sensormanager.startall();
+
 		// show startPage
 		// showSingleFragmentInRootContent(startpageFragment);
 	}
 
 	private void showSingleFragmentInRootContent(Fragment page) {
+		if(currentFragmentInRootContent==page)
+			return;
 		FragmentTransaction transaction = getFragmentManager()
 				.beginTransaction();
 		if (currentFragmentInRootContent != null)
@@ -96,6 +100,12 @@ public class HWMP2PClient extends Activity implements
 		return handler;
 	}
 
+	private void addStatusText(String text) {
+		statusView.append(text);
+		((ScrollView) findViewById(R.id.stateTextScroll))
+				.fullScroll(ScrollView.FOCUS_DOWN);
+	}
+
 	@Override
 	public boolean handleMessage(Message msg) {
 		// TODO Auto-generated method stub
@@ -104,14 +114,20 @@ public class HWMP2PClient extends Activity implements
 		case MessageEnum.VOLUMECHANGE:
 		case MessageEnum.ORIENTATIONCHANGE:
 		case MessageEnum.WIFIINTENSITYCHANGE:
+		case MessageEnum.CONNECTIONBROKEN:
 			mainpageFragment.handleMessage(msg);
 			break;
 
 		case MessageEnum.LOGMESSAGE:
-			statusView.append((String) msg.obj);
+			addStatusText((String) msg.obj);
+
 			break;
 		case MessageEnum.WIFIAPDISCOVED:
 			apSelectorFragment.handleMessage(msg);
+			break;
+		case MessageEnum.CONNECTIONESTABLISHED:
+			showSingleFragmentInRootContent(mainpageFragment);
+			mainpageFragment.handleMessage(msg);
 			break;
 		default:
 			break;
@@ -134,6 +150,22 @@ public class HWMP2PClient extends Activity implements
 		default:
 			break;
 		}
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		sensormanager.stopall();
+		cmanager.stop();
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		sensormanager.startall();
+		cmanager.start();
 	}
 
 	@Override

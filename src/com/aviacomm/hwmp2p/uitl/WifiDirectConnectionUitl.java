@@ -16,7 +16,9 @@ public class WifiDirectConnectionUitl {
 		if(status==WifiP2pManager.ERROR)
 			return "ERROR";
 		if(status==WifiP2pManager.P2P_UNSUPPORTED)
-			return "NOTSUPPORTED";
+			return "P2P_UNSUPPORTED";
+		if(status==WifiP2pManager.NO_SERVICE_REQUESTS)
+			return "NO_SERVICE_REQUESTS";
 		return "NOT KNOW,"+status;
 	}
 	public static int getAvailablePort(){
