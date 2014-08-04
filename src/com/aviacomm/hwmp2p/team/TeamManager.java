@@ -1,6 +1,5 @@
 package com.aviacomm.hwmp2p.team;
 
-import com.aviacomm.hwmp2p.team.ConnectionManager.MWifiDirectAP;
 
 /*
  * This is for virtual team,which is designed for the Reconnection;

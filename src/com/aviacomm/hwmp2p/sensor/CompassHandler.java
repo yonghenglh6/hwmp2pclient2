@@ -1,22 +1,16 @@
 package com.aviacomm.hwmp2p.sensor;
 
 import com.aviacomm.hwmp2p.HWMP2PClient;
-import com.aviacomm.hwmp2p.MLog;
-import com.aviacomm.hwmp2p.MessageEnum;
-import com.aviacomm.hwmp2p.sensor.BatteryHandler.BatteryBroadcastReceiver;
 
-import android.app.Activity;
+import com.aviacomm.hwmp2p.MessageEnum;
+
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
+
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.os.Handler;
-import android.util.Log;
-import android.view.View;
+
 /*
  * NOT USED FOR NOW! THIS USE THE TWO RECOMMENED SENSOR(ACCELEROMETER and MAGNETIC_FIELD)! BUT IT IS SO DIFFICULT TO HANDLE.
  * So temporarily we use ORIENTATION Sensor, which is deprecated now.
@@ -24,7 +18,9 @@ import android.view.View;
  */
 public class CompassHandler implements SensorEventListener {
 	static int state;
+	@SuppressWarnings("unused")
 	private final int RUN = 1;
+	@SuppressWarnings("unused")
 	private final int STOP = 2;
 
 	Handler handler;

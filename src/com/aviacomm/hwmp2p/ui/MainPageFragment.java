@@ -1,26 +1,18 @@
 package com.aviacomm.hwmp2p.ui;
 
-import com.aviacomm.hwmp2p.HWMP2PClient;
+
 import com.aviacomm.hwmp2p.MessageEnum;
 import com.aviacomm.hwmp2p.R;
-import com.aviacomm.hwmp2p.R.id;
-import com.aviacomm.hwmp2p.R.layout;
 import com.aviacomm.hwmp2p.sensor.MusicVolumeManager;
 import com.aviacomm.hwmp2p.team.ConnectionManager;
 import com.aviacomm.hwmp2p.team.WifiStateManager;
-import com.aviacomm.hwmp2p.ui.StartPageFragment.StartPageListener;
-
 import android.app.Fragment;
-import android.content.Context;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -122,14 +114,10 @@ public class MainPageFragment extends Fragment {
 				volume.setProgress(musicVolumeManager.getVolumeLevel());
 			}
 		});
-		resetwifi.setText(wifiStateManager.isWifiOn() ? "TurnOff WIFI"
-				: "TurnON WIFI");
 		resetwifi.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
 				wifiStateManager.resetWifi();
-				resetwifi.setText(wifiStateManager.isWifiOn() ? "TurnOff WIFI"
-						: "TurnON WIFI");
 			}
 		});
 		// wifi_intensity.setImageResource(R.drawable.wifi_intensity_levellist);
@@ -142,7 +130,8 @@ public class MainPageFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 		volume.setProgress(musicVolumeManager.getVolumeLevel());
-		connection_establish_indicator.setAlpha(isConnectionEstablished?0f:1f);
+		connection_establish_indicator.setAlpha(isConnectionEstablished ? 0f
+				: 1f);
 	}
 
 	public void handleMessage(Message msg) {
@@ -167,7 +156,7 @@ public class MainPageFragment extends Fragment {
 			if (connection_establish_indicator != null) {
 				isConnectionEstablished = true;
 				connection_establish_indicator.setAlpha(0f);
-				HWMP2PClient.log.i("it should be invisible");
+//				HWMP2PClient.log.i("it should be invisible");
 			}
 			break;
 		case MessageEnum.CONNECTIONBROKEN:

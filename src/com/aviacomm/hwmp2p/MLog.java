@@ -2,7 +2,6 @@ package com.aviacomm.hwmp2p;
 
 import android.os.Handler;
 import android.util.Log;
-import android.widget.TextView;
 /*
  * show the information to the State Panel. 
  */

@@ -1,29 +1,20 @@
 package com.aviacomm.hwmp2p.sensor;
 
-import com.aviacomm.hwmp2p.HWMP2PClient;
-import com.aviacomm.hwmp2p.MLog;
 import com.aviacomm.hwmp2p.MessageEnum;
-import com.aviacomm.hwmp2p.sensor.BatteryHandler.BatteryBroadcastReceiver;
-
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.os.Handler;
-import android.util.Log;
-import android.view.View;
 
 /*
  * IT WILL BE REPLEACED BY CompassHandler IN THE FUTURE!
  */
 public class CompassHandler2 implements SensorEventListener {
 	static int state;
+	@SuppressWarnings("unused")
 	private final int RUN = 1;
+	@SuppressWarnings("unused")
 	private final int STOP = 2;
 
 	Handler handler;
@@ -36,6 +27,7 @@ public class CompassHandler2 implements SensorEventListener {
 	// 自定义的view
 	// private SampleView mView;
 
+	@SuppressWarnings("deprecation")
 	public CompassHandler2(Context context, Handler handler) {
 		this.context = context;
 		this.handler = handler;

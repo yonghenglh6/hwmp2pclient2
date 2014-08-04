@@ -2,29 +2,21 @@ package com.aviacomm.hwmp2p.ui;
 
 import com.aviacomm.hwmp2p.MessageEnum;
 import com.aviacomm.hwmp2p.R;
-import com.aviacomm.hwmp2p.R.id;
-import com.aviacomm.hwmp2p.R.layout;
-import com.aviacomm.hwmp2p.team.ConnectionManager;
-import com.aviacomm.hwmp2p.team.ConnectionManager.MWifiDirectAP;
+import com.aviacomm.hwmp2p.team.MWifiDirectAP;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.graphics.Canvas;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.Message;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 /*
  * Wireless connection AP select page.

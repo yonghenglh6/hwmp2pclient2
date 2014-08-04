@@ -2,8 +2,6 @@ package com.aviacomm.hwmp2p.ui;
 
 
 import com.aviacomm.hwmp2p.R;
-import com.aviacomm.hwmp2p.R.id;
-import com.aviacomm.hwmp2p.R.layout;
 import com.aviacomm.hwmp2p.team.ConnectionManager;
 
 import android.app.Fragment;
@@ -12,10 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
 /*
  * Discarded for now!
  * It appeared in "HWM P2P (Client27).pdf", disappeared in "HWM P2P GUI Description 7-24.pdf"

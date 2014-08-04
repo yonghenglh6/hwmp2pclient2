@@ -1,5 +1,8 @@
 package com.aviacomm.hwmp2p.team;
 
+import com.aviacomm.hwmp2p.uitl.DevelopUtil;
+import com.aviacomm.hwmp2p.uitl.DevelopUtil.waitCondition;
+
 import android.content.Context;
 import android.net.wifi.WifiManager;
 
@@ -35,8 +38,21 @@ public class WifiStateManager {
 	}
 
 	public void resetWifi() {
-		turnOffWifi();
+		if (wifiManager.isWifiEnabled())
+			turnOffWifi();
+		DevelopUtil.waitAndCheckUntil(new waitCondition() {
+			@Override
+			public boolean task() {
+				return !wifiManager.isWifiEnabled();
+			}
+		});
 		turnOnWifi();
+		DevelopUtil.waitAndCheckUntil(new waitCondition() {
+			@Override
+			public boolean task() {
+				return wifiManager.isWifiEnabled();
+			}
+		});
 	}
 
 }

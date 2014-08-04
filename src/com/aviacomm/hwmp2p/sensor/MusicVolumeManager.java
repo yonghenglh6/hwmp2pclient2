@@ -1,16 +1,7 @@
 package com.aviacomm.hwmp2p.sensor;
 
-import com.aviacomm.hwmp2p.MessageEnum;
-import com.aviacomm.hwmp2p.ui.MainPageFragment;
-
-import android.app.Application;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.media.AudioManager;
-import android.os.BatteryManager;
-import android.os.Handler;
 import android.util.Log;
 
 /*

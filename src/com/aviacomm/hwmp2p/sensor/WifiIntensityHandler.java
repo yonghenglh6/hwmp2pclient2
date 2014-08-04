@@ -1,11 +1,9 @@
 package com.aviacomm.hwmp2p.sensor;
 
-import com.aviacomm.hwmp2p.HWMP2PClient;
 import com.aviacomm.hwmp2p.MessageEnum;
 import com.aviacomm.hwmp2p.uitl.CommonSingleCircleThread;
 
 import android.content.Context;
-import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
 /*

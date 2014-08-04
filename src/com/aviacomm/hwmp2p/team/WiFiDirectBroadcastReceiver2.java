@@ -4,11 +4,6 @@ package com.aviacomm.hwmp2p.team;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.NetworkInfo;
-import android.net.wifi.p2p.WifiP2pDevice;
-import android.net.wifi.p2p.WifiP2pManager;
-import android.util.Log;
 
 //Not used for Now !!!!!!!!!!!!!!!!!!!!!!!!!
 public class WiFiDirectBroadcastReceiver2 extends BroadcastReceiver {

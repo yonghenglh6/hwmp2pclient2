@@ -2,30 +2,20 @@ package com.aviacomm.hwmp2p;
 
 import com.aviacomm.hwmp2p.sensor.SensorManager;
 import com.aviacomm.hwmp2p.team.ConnectionManager;
-import com.aviacomm.hwmp2p.team.ConnectionManager.MWifiDirectAP;
+import com.aviacomm.hwmp2p.team.MWifiDirectAP;
 import com.aviacomm.hwmp2p.ui.APSelectorFragment;
 import com.aviacomm.hwmp2p.ui.APSelectorFragment.ApSelectorListener;
 import com.aviacomm.hwmp2p.ui.ActionPageFragment;
 import com.aviacomm.hwmp2p.ui.DisplayPageFragment;
 import com.aviacomm.hwmp2p.ui.MainPageFragment;
 import com.aviacomm.hwmp2p.ui.MainPageFragment.MainPageListener;
-import com.aviacomm.hwmp2p.ui.StartPageFragment;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Context;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.Layout;
-import android.util.AttributeSet;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -76,14 +66,14 @@ public class HWMP2PClient extends Activity implements
 				.add(R.id.displayContent, displaypageFragment).commit();
 		getFragmentManager().beginTransaction()
 				.add(R.id.actionContent, actionpageFragment).commit();
-
 		// start Sensor
 		// startpageFragment = new StartPageFragment(this);
-
 		// show startPage
 		// showSingleFragmentInRootContent(startpageFragment);
 	}
-
+	public ConnectionManager getConnectionManager(){
+		return cmanager;
+	}
 	private void showSingleFragmentInRootContent(Fragment page) {
 		if(currentFragmentInRootContent==page)
 			return;
@@ -185,7 +175,6 @@ public class HWMP2PClient extends Activity implements
 		default:
 			break;
 		}
-
 	}
 
 	@Override

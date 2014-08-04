@@ -1,11 +1,5 @@
 package com.aviacomm.hwmp2p.uitl;
 
-import android.content.Context;
-import android.media.AudioManager;
-import android.os.Handler;
-
-import com.aviacomm.hwmp2p.MessageEnum;
-
 /*
  * This is a loop thread for reducing code amount
  */

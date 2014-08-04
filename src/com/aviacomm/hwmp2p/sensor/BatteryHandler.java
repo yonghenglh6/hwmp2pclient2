@@ -2,7 +2,6 @@ package com.aviacomm.hwmp2p.sensor;
 
 import com.aviacomm.hwmp2p.MessageEnum;
 
-import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
