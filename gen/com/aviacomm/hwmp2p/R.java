@@ -11,87 +11,153 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
-        public static final int BLACK=0x7f060005;
-        public static final int BLUE=0x7f060004;
-        public static final int GREEN=0x7f060003;
-        public static final int MainPageBackgroundColor=0x7f060001;
-        public static final int RED=0x7f060002;
-        public static final int StartPageBackgroundColor=0x7f060000;
-        public static final int WHITE=0x7f060006;
+        public static final int BLACK=0x7f070005;
+        public static final int BLUE=0x7f070004;
+        public static final int GREEN=0x7f070003;
+        public static final int MainPageBackgroundColor=0x7f070001;
+        public static final int RED=0x7f070002;
+        public static final int StartPageBackgroundColor=0x7f070000;
+        public static final int WHITE=0x7f070006;
+    }
+    public static final class dimen {
+        public static final int bigfont=0x7f040000;
     }
     public static final class drawable {
         public static final int action_pic=0x7f020000;
         public static final int battery=0x7f020001;
-        public static final int batteryloading2=0x7f020002;
-        public static final int compass_background=0x7f020003;
-        public static final int compass_pointer=0x7f020004;
-        public static final int display_pic=0x7f020005;
-        public static final int error=0x7f020006;
-        public static final int ic_launcher=0x7f020007;
-        public static final int mainpage_back=0x7f020008;
-        public static final int progressbar_battery=0x7f020009;
-        public static final int progressbar_volume=0x7f02000a;
-        public static final int progressbar_volume_backgroud=0x7f02000b;
-        public static final int progressbar_volume_loading=0x7f02000c;
-        public static final int startpage_connect=0x7f02000d;
-        public static final int startpage_settings=0x7f02000e;
-        public static final int startpage_title=0x7f02000f;
-        public static final int volume_icon=0x7f020010;
-        public static final int volume_lable=0x7f020011;
-        public static final int wifi_intensity_0=0x7f020012;
-        public static final int wifi_intensity_1=0x7f020013;
-        public static final int wifi_intensity_2=0x7f020014;
-        public static final int wifi_intensity_3=0x7f020015;
-        public static final int wifi_intensity_4=0x7f020016;
-        public static final int wifi_intensity_levellist=0x7f020017;
+        public static final int battery_background=0x7f020002;
+        public static final int battery_decorate=0x7f020003;
+        public static final int battery_loading=0x7f020004;
+        public static final int batteryloading2=0x7f020005;
+        public static final int cancelbutton=0x7f020006;
+        public static final int compass_background=0x7f020007;
+        public static final int compass_pointer=0x7f020008;
+        public static final int config_cf_button_c=0x7f020009;
+        public static final int config_cf_button_f=0x7f02000a;
+        public static final int config_cf_button_levellist=0x7f02000b;
+        public static final int display_heart=0x7f02000c;
+        public static final int display_pic=0x7f02000d;
+        public static final int display_sheet_background=0x7f02000e;
+        public static final int display_warn_background=0x7f02000f;
+        public static final int error=0x7f020010;
+        public static final int ic_launcher=0x7f020011;
+        public static final int mainpage_back=0x7f020012;
+        public static final int mainpage_channel_display=0x7f020013;
+        public static final int mainpage_config_button=0x7f020014;
+        public static final int negativebutton=0x7f020015;
+        public static final int positivebutton=0x7f020016;
+        public static final int progressbar_battery=0x7f020017;
+        public static final int progressbar_mainpage_volume=0x7f020018;
+        public static final int progressbar_volume_backgroud=0x7f020019;
+        public static final int progressbar_volume_loading=0x7f02001a;
+        public static final int progressbar_volumeadjust_volume=0x7f02001b;
+        public static final int savebutton=0x7f02001c;
+        public static final int startpage_connect=0x7f02001d;
+        public static final int startpage_settings=0x7f02001e;
+        public static final int startpage_title=0x7f02001f;
+        public static final int volume_icon=0x7f020020;
+        public static final int volume_lable=0x7f020021;
+        public static final int volumeadjust_background=0x7f020022;
+        public static final int volumeadjust_decreasebutton=0x7f020023;
+        public static final int volumeadjust_increasebutton=0x7f020024;
+        public static final int volumeadjust_volume_background=0x7f020025;
+        public static final int volumeadjust_volume_loading=0x7f020026;
+        public static final int wifi_intensity_0=0x7f020027;
+        public static final int wifi_intensity_1=0x7f020028;
+        public static final int wifi_intensity_2=0x7f020029;
+        public static final int wifi_intensity_3=0x7f02002a;
+        public static final int wifi_intensity_4=0x7f02002b;
+        public static final int wifi_intensity_levellist=0x7f02002c;
     }
     public static final class id {
-        public static final int AbsoluteLayout1=0x7f07000d;
-        public static final int LinearLayout1=0x7f070006;
-        public static final int RelativeLayout1=0x7f070016;
-        public static final int actionContent=0x7f070002;
-        public static final int apGroup=0x7f070007;
-        public static final int apselector_cancel=0x7f07000b;
-        public static final int apselector_connect=0x7f07000a;
-        public static final int apselector_rescan=0x7f07000c;
-        public static final int batteryProgressBar=0x7f07000f;
-        public static final int compass_pointer=0x7f070017;
-        public static final int displayContent=0x7f070001;
-        public static final int imageView1=0x7f070010;
-        public static final int mainpage_back_button=0x7f07000e;
-        public static final int mainpage_connection_establish_indicator=0x7f07001a;
-        public static final int mainpage_createteam=0x7f070014;
-        public static final int mainpage_decvolume=0x7f070013;
-        public static final int mainpage_incvolume=0x7f070012;
-        public static final int mainpage_resetwifi=0x7f070019;
-        public static final int mainpage_scan=0x7f070015;
-        public static final int progressBar1=0x7f070009;
-        public static final int rootContent=0x7f070000;
-        public static final int scrollView1=0x7f070003;
-        public static final int startpage_connect_button=0x7f07001b;
-        public static final int startpage_settings_button=0x7f07001c;
-        public static final int stateText=0x7f070005;
-        public static final int stateTextScroll=0x7f070004;
-        public static final int textView1=0x7f070008;
-        public static final int volumeProgressBar=0x7f070011;
-        public static final int wifiIntensity=0x7f070018;
+        public static final int AbsoluteLayout1=0x7f080007;
+        public static final int LinearLayout1=0x7f080006;
+        public static final int RelativeLayout1=0x7f08000e;
+        public static final int actionContent=0x7f080002;
+        public static final int apGroup=0x7f080008;
+        public static final int apselector_cancel=0x7f08000b;
+        public static final int apselector_connect=0x7f08000a;
+        public static final int apselector_rescan=0x7f080009;
+        public static final int apselector_scantextview=0x7f08000d;
+        public static final int batteryProgressBar=0x7f080033;
+        public static final int compass_pointer=0x7f080038;
+        public static final int config_cancel=0x7f080025;
+        public static final int config_cf_button=0x7f080024;
+        public static final int config_devicename=0x7f080023;
+        public static final int config_id=0x7f080018;
+        public static final int config_maxbreath=0x7f08001e;
+        public static final int config_maxheart=0x7f080016;
+        public static final int config_minbreath=0x7f08001b;
+        public static final int config_minheart=0x7f080012;
+        public static final int config_save=0x7f080026;
+        public static final int config_temperature=0x7f080021;
+        public static final int displayContent=0x7f080001;
+        public static final int display_breathing_chart=0x7f08002e;
+        public static final int display_heartnumber=0x7f08002c;
+        public static final int display_temperature_chart=0x7f08002b;
+        public static final int imageView2=0x7f08002d;
+        public static final int imageView3=0x7f08002a;
+        public static final int linearLayout1=0x7f080010;
+        public static final int linearLayout2=0x7f08000f;
+        public static final int linearLayout3=0x7f080014;
+        public static final int linearLayout4=0x7f080019;
+        public static final int linearLayout5=0x7f080013;
+        public static final int linearLayout6=0x7f08001f;
+        public static final int linearLayout7=0x7f08001c;
+        public static final int mainpage_back_button=0x7f080030;
+        public static final int mainpage_battery_number=0x7f080034;
+        public static final int mainpage_config_button=0x7f08003c;
+        public static final int mainpage_connection_establish_indicator=0x7f080037;
+        public static final int mainpage_createteam=0x7f08002f;
+        public static final int mainpage_resetwifi=0x7f080032;
+        public static final int mainpage_scan=0x7f080039;
+        public static final int mainpage_volumeadjust_layout=0x7f08003a;
+        public static final int mainpage_wifiintensity_layout=0x7f080035;
+        public static final int progressBar1=0x7f08000c;
+        public static final int relativeLayout1=0x7f080031;
+        public static final int relativeLayout2=0x7f080029;
+        public static final int relativeLayout3=0x7f080028;
+        public static final int relativeLayout4=0x7f080027;
+        public static final int rootContent=0x7f080000;
+        public static final int scrollView1=0x7f080003;
+        public static final int startpage_connect_button=0x7f08003d;
+        public static final int startpage_settings_button=0x7f08003e;
+        public static final int stateText=0x7f080005;
+        public static final int stateTextScroll=0x7f080004;
+        public static final int textView1=0x7f080022;
+        public static final int textView2=0x7f080017;
+        public static final int textView3=0x7f080011;
+        public static final int textView4=0x7f08001a;
+        public static final int textView7=0x7f080020;
+        public static final int textView8=0x7f08001d;
+        public static final int textView9=0x7f080015;
+        public static final int volumeProgressBar=0x7f08003b;
+        public static final int volumeadjust_cancel=0x7f080042;
+        public static final int volumeadjust_save=0x7f080043;
+        public static final int volumeadjust_volume_decrease=0x7f080041;
+        public static final int volumeadjust_volume_increase=0x7f08003f;
+        public static final int volumeadjust_volume_progressbar=0x7f080040;
+        public static final int wifiIntensity=0x7f080036;
     }
     public static final class layout {
         public static final int activity_hwmp2_pclient=0x7f030000;
         public static final int contentpage=0x7f030001;
         public static final int fragment_action=0x7f030002;
         public static final int fragment_ap_selector=0x7f030003;
-        public static final int fragment_display=0x7f030004;
-        public static final int fragment_main=0x7f030005;
-        public static final int fragment_startpage=0x7f030006;
+        public static final int fragment_config=0x7f030004;
+        public static final int fragment_display=0x7f030005;
+        public static final int fragment_main=0x7f030006;
+        public static final int fragment_startpage=0x7f030007;
+        public static final int fragment_volumeadjust=0x7f030008;
     }
     public static final class string {
-        public static final int app_name=0x7f040000;
-        public static final int hello_world=0x7f040001;
-        public static final int mainpage_back_contentDescription=0x7f040005;
-        public static final int startpage_connect_contentDescription=0x7f040003;
-        public static final int startpage_settings_contentDescription=0x7f040004;
-        public static final int startpage_title_contentDescription=0x7f040002;
+        public static final int app_name=0x7f050000;
+        public static final int battery_initial_text=0x7f050006;
+        public static final int hello_world=0x7f050001;
+        public static final int mainpage_back_contentDescription=0x7f050005;
+        public static final int startpage_connect_contentDescription=0x7f050003;
+        public static final int startpage_settings_contentDescription=0x7f050004;
+        public static final int startpage_title_contentDescription=0x7f050002;
     }
     public static final class style {
         /** 
@@ -121,11 +187,11 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f050000;
-        public static final int AppNoTitleTheme=0x7f050002;
+        public static final int AppBaseTheme=0x7f060000;
+        public static final int AppNoTitleTheme=0x7f060002;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f050001;
+        public static final int AppTheme=0x7f060001;
     }
 }

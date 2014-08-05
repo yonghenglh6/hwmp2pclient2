@@ -6,9 +6,14 @@ import com.aviacomm.hwmp2p.team.MWifiDirectAP;
 import com.aviacomm.hwmp2p.ui.APSelectorFragment;
 import com.aviacomm.hwmp2p.ui.APSelectorFragment.ApSelectorListener;
 import com.aviacomm.hwmp2p.ui.ActionPageFragment;
+import com.aviacomm.hwmp2p.ui.ClientConfigFragment;
+import com.aviacomm.hwmp2p.ui.ClientConfigFragment.ClientConfigListener;
 import com.aviacomm.hwmp2p.ui.DisplayPageFragment;
 import com.aviacomm.hwmp2p.ui.MainPageFragment;
 import com.aviacomm.hwmp2p.ui.MainPageFragment.MainPageListener;
+import com.aviacomm.hwmp2p.ui.VolumeAdjustFragment;
+import com.aviacomm.hwmp2p.ui.VolumeAdjustFragment.VolumeAdjustListener;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -26,7 +31,8 @@ import android.widget.Toast;
  */
 public class HWMP2PClient extends Activity implements
 		ConnectionManager.ConnectionManagerListener, Handler.Callback,
-		MainPageListener, ApSelectorListener {
+		MainPageListener, ApSelectorListener, VolumeAdjustListener,
+		ClientConfigListener {
 
 	public static MLog log;
 	// StartPageFragment startpageFragment;
@@ -34,6 +40,7 @@ public class HWMP2PClient extends Activity implements
 	// ViewGroup displayContent;
 	// ViewGroup actionContent;
 	MainPageFragment mainpageFragment;
+	public static ClientConfig clientConfig = new ClientConfig();
 	DisplayPageFragment displaypageFragment;
 	ActionPageFragment actionpageFragment;
 	ConnectionManager cmanager;
@@ -42,6 +49,8 @@ public class HWMP2PClient extends Activity implements
 	APSelectorFragment apSelectorFragment;
 	TextView statusView;
 	SensorManager sensormanager;
+	VolumeAdjustFragment volumeAdjustFragment;
+	ClientConfigFragment clientConfigFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +64,14 @@ public class HWMP2PClient extends Activity implements
 		sensormanager = new SensorManager(this, getHandler());
 
 		// init three fragment in the main activity
-		mainpageFragment = new MainPageFragment(cmanager, this);
+		mainpageFragment = new MainPageFragment(this, this);
 		displaypageFragment = new DisplayPageFragment(this);
 		actionpageFragment = new ActionPageFragment(this);
 		apSelectorFragment = new APSelectorFragment(this, this);
-
+		volumeAdjustFragment = new VolumeAdjustFragment(this, this);
+		clientConfigFragment = new ClientConfigFragment(this, this);
 		rootContent = (ViewGroup) findViewById(R.id.rootContent);
+
 		showSingleFragmentInRootContent(mainpageFragment);
 		getFragmentManager().beginTransaction()
 				.add(R.id.displayContent, displaypageFragment).commit();
@@ -71,17 +82,20 @@ public class HWMP2PClient extends Activity implements
 		// show startPage
 		// showSingleFragmentInRootContent(startpageFragment);
 	}
-	public ConnectionManager getConnectionManager(){
+
+	public ConnectionManager getConnectionManager() {
 		return cmanager;
 	}
+
 	private void showSingleFragmentInRootContent(Fragment page) {
-		if(currentFragmentInRootContent==page)
+		if (currentFragmentInRootContent == page)
 			return;
 		FragmentTransaction transaction = getFragmentManager()
 				.beginTransaction();
 		if (currentFragmentInRootContent != null)
 			transaction.remove(currentFragmentInRootContent);
 		transaction.add(R.id.rootContent, page);
+		// transaction.addToBackStack(null);
 		transaction.commit();
 		currentFragmentInRootContent = page;
 	}
@@ -172,6 +186,12 @@ public class HWMP2PClient extends Activity implements
 		case MainPageListener.BUTTON_CREATETEAM:
 			cmanager.createTeamService();
 			break;
+		case MainPageListener.VOLUMEADJUST:
+			showSingleFragmentInRootContent(volumeAdjustFragment);
+			break;
+		case MainPageListener.CONFIG:
+			showSingleFragmentInRootContent(clientConfigFragment);
+			break;
 		default:
 			break;
 		}
@@ -181,6 +201,25 @@ public class HWMP2PClient extends Activity implements
 	public void onInvokeConnectionEvent(int eventId, Object obj) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void onClickVolumeAdjustButton(int buttonId, Object obj) {
+		// TODO Auto-generated method stub
+		showSingleFragmentInRootContent(mainpageFragment);
+	}
+
+	@Override
+	public void onClickClientConfigButton(int buttonId, Object obj) {
+		// TODO Auto-generated method stub
+		switch (buttonId) {
+		case ClientConfigListener.BUTTON_SAVE:
+			showSingleFragmentInRootContent(mainpageFragment);
+			break;
+		case ClientConfigListener.BUTTON_CANCEL:
+			showSingleFragmentInRootContent(mainpageFragment);
+			break;
+		}
 	}
 
 }

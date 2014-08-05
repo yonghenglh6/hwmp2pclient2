@@ -1,11 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout1"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
+    android:background="@color/BLACK"
     android:orientation="horizontal"
-    tools:context=".HWMP2PClient" 
-   android:background="@drawable/display_pic"
-    >
+    tools:context=".HWMP2PClient" >
 
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/relativeLayout4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relativeLayout3"
+        android:layout_marginLeft="13dp"
+        android:layout_toRightOf="@+id/relativeLayout2" >
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="200dp"
+            android:layout_height="70dp"
+            android:src="@drawable/display_sheet_background" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="19dp"
+            android:layout_marginTop="3dp"
+            android:text="Body Temperature"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <com.aviacomm.hwmp2p.ui.ChartView
+            android:id="@+id/display_temperature_chart"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignRight="@+id/imageView3"
+            android:layout_below="@+id/textView2" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/relativeLayout4"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="23dp"
+        android:layout_marginLeft="22dp" >
+
+        <ImageView
+            android:id="@+id/config_cf_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/display_heart" />
+
+        <TextView
+            android:id="@+id/display_heartnumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="98"
+            android:textSize="@dimen/bigfont"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/relativeLayout4"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="11dp" >
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="200dp"
+            android:layout_height="70dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/display_sheet_background" />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="3dp"
+            android:text="Breathing Rate"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <com.aviacomm.hwmp2p.ui.ChartView
+            android:id="@+id/display_breathing_chart"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignRight="@+id/imageView2"
+            android:layout_below="@+id/textView1" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/relativeLayout2"
+        android:layout_marginTop="10dp"
+        android:text="LOW BATTERY"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:background="@drawable/display_warn_background"
+        android:gravity="center"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView3"
+        android:layout_toRightOf="@+id/textView3"
+        android:text="CRITICAL DANGER"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:background="@drawable/display_warn_background"
+         android:gravity="center"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/config_save"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView4"
+        android:layout_toRightOf="@+id/textView4"
+        android:text="OUT OF RANGE"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:background="@drawable/display_warn_background"
+         android:gravity="center"
+        android:textSize="13sp" />
+
+</RelativeLayout>

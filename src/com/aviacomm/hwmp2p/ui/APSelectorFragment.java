@@ -6,6 +6,7 @@ import com.aviacomm.hwmp2p.team.MWifiDirectAP;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Handler.Callback;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
 /*
  * Wireless connection AP select page.
  */
@@ -51,9 +53,11 @@ public class APSelectorFragment extends Fragment implements Callback {
 						.getCheckedRadioButtonId());
 				if (selectedButton instanceof MAPRadioButton) {
 					listener.onClickAPSelectorButton(
-							ApSelectorListener.BUTTON_CONNECT, ((MAPRadioButton)selectedButton).getAp());
-				}else{
-					Toast.makeText(context, "Please check One AP!", Toast.LENGTH_SHORT).show();
+							ApSelectorListener.BUTTON_CONNECT,
+							((MAPRadioButton) selectedButton).getAp());
+				} else {
+					Toast.makeText(context, "Please check One AP!",
+							Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
@@ -91,24 +95,30 @@ public class APSelectorFragment extends Fragment implements Callback {
 	}
 
 	public boolean handleMessage(Message msg) {
+		if(!this.isResumed())
+			return false;
 		switch (msg.what) {
 		case MessageEnum.WIFIAPDISCOVED:
-			apgroup.addView(new MAPRadioButton(getActivity(),
-					(MWifiDirectAP) msg.obj));
+			if (apgroup != null)
+				apgroup.addView(new MAPRadioButton(context,
+						(MWifiDirectAP) msg.obj));
 			break;
 		default:
 			break;
 		}
 		return false;
 	}
-	
+
 	public class MAPRadioButton extends RadioButton {
 		MWifiDirectAP ap;
+
 		public MAPRadioButton(Context context, MWifiDirectAP ap) {
 			super(context);
 			this.ap = ap;
 			this.setText(ap.device.deviceName);
+			this.setTextColor(Color.BLACK);
 		}
+
 		public MWifiDirectAP getAp() {
 			return ap;
 		}

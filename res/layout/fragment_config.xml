@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/volumeadjust_background"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/linearLayout1"
+        android:layout_below="@+id/linearLayout1"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Min Heart Rate"
+            android:textColor="@color/BLACK" />
+
+        <EditText
+            android:id="@+id/config_minheart"
+            android:layout_width="100dp"
+            android:layout_height="33dp"
+            android:ems="10"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/linearLayout3"
+        android:layout_alignTop="@+id/linearLayout2"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Max Heart Rate"
+            android:textColor="@color/BLACK" />
+
+        <EditText
+            android:id="@+id/config_maxheart"
+            android:layout_width="105dp"
+            android:layout_height="33dp"
+            android:ems="10"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/linearLayout1"
+        android:layout_marginLeft="25dp"
+        android:layout_toRightOf="@+id/linearLayout2"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="ID"
+            android:textColor="@color/BLACK" />
+
+        <EditText
+            android:id="@+id/config_id"
+            android:layout_width="55dp"
+            android:layout_height="33dp"
+            android:ems="10"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/linearLayout2"
+        android:layout_below="@+id/linearLayout2"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Min Breath Rate"
+            android:textColor="@color/BLACK" />
+
+        <EditText
+            android:id="@+id/config_minbreath"
+            android:layout_width="114dp"
+            android:layout_height="33dp"
+            android:ems="10"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/linearLayout5"
+        android:layout_alignTop="@+id/linearLayout4"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Max Breath Rate"
+            android:textColor="@color/BLACK" />
+
+        <EditText
+            android:id="@+id/config_maxbreath"
+            android:layout_width="120dp"
+            android:layout_height="33dp"
+            android:ems="10"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/linearLayout4"
+        android:layout_below="@+id/linearLayout4"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Max Body-Temperature"
+            android:textColor="@color/BLACK" />
+
+        <EditText
+            android:id="@+id/config_temperature"
+            android:layout_width="172dp"
+            android:layout_height="33dp"
+            android:ems="10"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="38dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Device Name"
+            android:textColor="@color/BLACK" />
+
+        <EditText
+            android:id="@+id/config_devicename"
+            android:layout_width="83dp"
+            android:layout_height="33dp"
+            android:ems="10"
+            android:textSize="12sp" >
+
+            <requestFocus />
+        </EditText>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/config_cf_button"
+        android:layout_width="49dp"
+        android:layout_height="33dp"
+        android:layout_alignBottom="@+id/linearLayout6"
+        android:layout_alignRight="@+id/linearLayout5"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/config_cf_button_levellist" />
+
+    <TextView
+        android:id="@+id/config_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/config_save"
+        android:layout_alignBottom="@+id/config_save"
+        android:layout_toRightOf="@+id/linearLayout4"
+        android:background="@drawable/negativebutton"
+        android:gravity="center"
+        android:text="Cancel"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/config_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/linearLayout6"
+        android:layout_below="@+id/linearLayout6"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/positivebutton"
+        android:gravity="center"
+        android:text="Save"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+</RelativeLayout>

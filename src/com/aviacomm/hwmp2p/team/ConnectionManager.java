@@ -374,13 +374,22 @@ public class ConnectionManager implements GroupInfoListener {
 
 	private void handleP2pStateChanged() {
 		// TODO Auto-generated method stub
-
+		HWMP2PClient.log.i(TAG, "p2psearch state changed");
 	}
 
 	@Override
 	public void onGroupInfoAvailable(WifiP2pGroup arg0) {
 		// TODO Auto-generated method stub
+		if (arg0 != null) {
+			String groupInfoStr = "";
+			groupInfoStr += "Am I the group Owner: " + arg0.isGroupOwner()
+					+ "\n";
+			groupInfoStr += "ClientListNumber: " + arg0.getClientList().size()
+					+ "\n";
+			groupInfoStr += "Passphrase: " + arg0.getPassphrase() + "\n";
 
+			HWMP2PClient.log.i(groupInfoStr);
+		}
 	}
 
 }

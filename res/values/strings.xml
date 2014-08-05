@@ -7,4 +7,5 @@
 	<string name="startpage_connect_contentDescription">Connect</string>
 	<string name="startpage_settings_contentDescription">Settings</string>	
 	<string name="mainpage_back_contentDescription">back</string>
+	<string name="battery_initial_text">%?</string>
 </resources>
