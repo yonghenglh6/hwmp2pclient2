@@ -1,7 +1,7 @@
 package com.aviacomm.hwmp2p.ui;
 
-import com.aviacomm.hwmp2p.MessageEnum;
 import com.aviacomm.hwmp2p.R;
+import com.aviacomm.hwmp2p.client.MessageEnum;
 import com.aviacomm.hwmp2p.team.MWifiDirectAP;
 
 import android.app.Fragment;

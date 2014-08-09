@@ -1,4 +1,4 @@
-package com.aviacomm.hwmp2p;
+package com.aviacomm.hwmp2p.client;
 
 /*
  * store the protocol for message's "what" attribute.
@@ -13,4 +13,7 @@ public class MessageEnum {
 	public final static int WIFIAPDISCOVED =        BASE + 6;
 	public final static int CONNECTIONESTABLISHED = BASE + 7;
 	public final static int CONNECTIONBROKEN      = BASE + 8;
+	public final static int LOWBATTERYWARN      =   BASE + 9;
+	public final static int CRITICALDANGERWARN    = BASE + 10;
+	public final static int OUTOFRANGEWARN  =       BASE + 11;
 }

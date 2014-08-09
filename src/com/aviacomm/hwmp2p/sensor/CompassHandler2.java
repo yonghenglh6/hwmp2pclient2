@@ -1,6 +1,7 @@
 package com.aviacomm.hwmp2p.sensor;
 
-import com.aviacomm.hwmp2p.MessageEnum;
+import com.aviacomm.hwmp2p.client.MessageEnum;
+
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;

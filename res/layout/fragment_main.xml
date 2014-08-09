@@ -60,7 +60,9 @@
         android:layout_alignParentTop="true"
         android:background="@android:drawable/btn_default_small"
         android:contentDescription="@string/mainpage_back_contentDescription"
-        android:src="@drawable/mainpage_back" />
+        android:src="@drawable/mainpage_back" 
+        android:visibility="invisible"
+        />
 
     <Button
         android:id="@+id/mainpage_resetwifi"

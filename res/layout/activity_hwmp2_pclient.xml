@@ -35,7 +35,7 @@
     <ScrollView
         android:id="@+id/stateTextScroll"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="270dp"
         android:layout_alignParentBottom="true" >
         <TextView
             android:id="@+id/stateText"

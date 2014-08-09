@@ -30,7 +30,7 @@
         <uses-library android:name="android.test.runner" />
 
         <activity
-            android:name=".HWMP2PClient"
+            android:name=".client.HWMP2PClient"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

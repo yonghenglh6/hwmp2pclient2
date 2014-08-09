@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Set;
 
-import com.aviacomm.hwmp2p.HWMP2PClient;
+import com.aviacomm.hwmp2p.client.HWMP2PClient;
 
 import zephyr.android.BioHarnessBT.BTClient;
 import zephyr.android.BioHarnessBT.ZephyrProtocol;
@@ -28,8 +28,9 @@ public class BioHarnessManager {
 
 	private final static String TAG = "bluetooth";
 	private Handler handler;
+
 	public BioHarnessManager(Handler handler, Context context) {
-		this.handler=handler;
+		this.handler = handler;
 		/*
 		 * Sending a message to android that we are going to initiate a pairing
 		 * request
@@ -57,13 +58,22 @@ public class BioHarnessManager {
 			Log.d("Bond state", "BOND_STATED = " + device.getBondState());
 		}
 	}
-	public void connect(){
+
+	public void start() {
+		new Thread(new Runnable() {
+			public void run() {
+				connect();
+			}
+		}).start();
+
+	}
+
+	public void connect() {
 		String BhMacID = "00:07:80:9D:8A:E8";
 		// String BhMacID = "00:07:80:88:F6:BF";
 		adapter = BluetoothAdapter.getDefaultAdapter();
 
-		Set<BluetoothDevice> pairedDevices = adapter
-				.getBondedDevices();
+		Set<BluetoothDevice> pairedDevices = adapter.getBondedDevices();
 
 		if (pairedDevices.size() > 0) {
 			for (BluetoothDevice device : pairedDevices) {
@@ -81,8 +91,7 @@ public class BioHarnessManager {
 		BluetoothDevice Device = adapter.getRemoteDevice(BhMacID);
 		String DeviceName = Device.getName();
 		_bt = new BTClient(adapter, BhMacID);
-		_NConnListener = new NewConnectedListener(handler,
-				handler);
+		_NConnListener = new NewConnectedListener(handler, handler);
 		_bt.addConnectedEventListener(_NConnListener);
 		if (_bt.IsConnected()) {
 			_bt.start();
@@ -93,18 +102,19 @@ public class BioHarnessManager {
 			HWMP2PClient.log.i("Cant connected To bt");
 		}
 	}
-	public void disconnect(){
+
+	public void disconnect() {
 		/*
-		 * This disconnects listener from acting on received
-		 * messages
+		 * This disconnects listener from acting on received messages
 		 */
 		_bt.removeConnectedEventListener(_NConnListener);
 		/*
-		 * Close the communication with the device & throw an
-		 * exception if failure
+		 * Close the communication with the device & throw an exception if
+		 * failure
 		 */
 		_bt.Close();
 	}
+
 	private class BTBroadcastReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {

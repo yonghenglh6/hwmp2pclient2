@@ -1,8 +1,10 @@
-package com.aviacomm.hwmp2p;
+package com.aviacomm.hwmp2p.client;
 
+import com.aviacomm.hwmp2p.R;
 import com.aviacomm.hwmp2p.sensor.SensorManager;
 import com.aviacomm.hwmp2p.team.ConnectionManager;
 import com.aviacomm.hwmp2p.team.MWifiDirectAP;
+import com.aviacomm.hwmp2p.team.TeamManager;
 import com.aviacomm.hwmp2p.ui.APSelectorFragment;
 import com.aviacomm.hwmp2p.ui.APSelectorFragment.ApSelectorListener;
 import com.aviacomm.hwmp2p.ui.ActionPageFragment;
@@ -33,17 +35,19 @@ public class HWMP2PClient extends Activity implements
 		ConnectionManager.ConnectionManagerListener, Handler.Callback,
 		MainPageListener, ApSelectorListener, VolumeAdjustListener,
 		ClientConfigListener {
-
+	public static boolean DEBUG = true;
+	public static boolean HASBLUETOOTH = true;
 	public static MLog log;
 	// StartPageFragment startpageFragment;
 	ViewGroup rootContent;
 	// ViewGroup displayContent;
 	// ViewGroup actionContent;
 	MainPageFragment mainpageFragment;
-	public static ClientConfig clientConfig = new ClientConfig();
+	public static ClientConfig clientConfig;
 	DisplayPageFragment displaypageFragment;
 	ActionPageFragment actionpageFragment;
-	ConnectionManager cmanager;
+	// ConnectionManager cmanager;
+	TeamManager teamManager;
 	public static Handler handler;
 	Fragment currentFragmentInRootContent;
 	APSelectorFragment apSelectorFragment;
@@ -56,11 +60,14 @@ public class HWMP2PClient extends Activity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_hwmp2_pclient);
+		clientConfig = new ClientConfig(this);
 		handler = new Handler(this);
 		log = new MLog(handler);
 		statusView = (TextView) this.findViewById(R.id.stateText);
-		cmanager = new ConnectionManager(this, this, handler);
-		cmanager.initial();
+		teamManager = new TeamManager(this, handler);
+		teamManager.initial();
+		// cmanager = new ConnectionManager(this, this, handler);
+		// cmanager.initial();
 		sensormanager = new SensorManager(this, getHandler());
 
 		// init three fragment in the main activity
@@ -83,8 +90,8 @@ public class HWMP2PClient extends Activity implements
 		// showSingleFragmentInRootContent(startpageFragment);
 	}
 
-	public ConnectionManager getConnectionManager() {
-		return cmanager;
+	public boolean isConnected() {
+		return teamManager.isConnected();
 	}
 
 	private void showSingleFragmentInRootContent(Fragment page) {
@@ -123,7 +130,7 @@ public class HWMP2PClient extends Activity implements
 			break;
 
 		case MessageEnum.LOGMESSAGE:
-			addStatusText((String) msg.obj);
+			addStatusText((String) msg.getData().getString("message"));
 
 			break;
 		case MessageEnum.WIFIAPDISCOVED:
@@ -132,6 +139,11 @@ public class HWMP2PClient extends Activity implements
 		case MessageEnum.CONNECTIONESTABLISHED:
 			showSingleFragmentInRootContent(mainpageFragment);
 			mainpageFragment.handleMessage(msg);
+			break;
+		case MessageEnum.LOWBATTERYWARN:
+		case MessageEnum.CRITICALDANGERWARN:
+		case MessageEnum.OUTOFRANGEWARN:
+			displaypageFragment.getHandler().handleMessage(msg);
 			break;
 		default:
 			break;
@@ -146,10 +158,10 @@ public class HWMP2PClient extends Activity implements
 			showSingleFragmentInRootContent(mainpageFragment);
 			break;
 		case ApSelectorListener.BUTTON_CONNECT:
-			cmanager.connect((MWifiDirectAP) obj);
+			teamManager.connect((MWifiDirectAP) obj);
 			break;
 		case ApSelectorListener.BUTTON_RESCAN:
-			cmanager.discoverTeamService();
+			teamManager.discoverTeam();
 			break;
 		default:
 			break;
@@ -161,7 +173,7 @@ public class HWMP2PClient extends Activity implements
 		// TODO Auto-generated method stub
 		super.onPause();
 		sensormanager.stopall();
-		cmanager.stop();
+		// cmanager.stop();
 	}
 
 	@Override
@@ -169,7 +181,7 @@ public class HWMP2PClient extends Activity implements
 		// TODO Auto-generated method stub
 		super.onResume();
 		sensormanager.startall();
-		cmanager.start();
+		// cmanager.start();
 	}
 
 	@Override
@@ -181,10 +193,10 @@ public class HWMP2PClient extends Activity implements
 			break;
 		case MainPageListener.BUTTON_SCAN:
 			showSingleFragmentInRootContent(apSelectorFragment);
-			cmanager.discoverTeamService();
+			teamManager.discoverTeam();
 			break;
 		case MainPageListener.BUTTON_CREATETEAM:
-			cmanager.createTeamService();
+			teamManager.createTeam();
 			break;
 		case MainPageListener.VOLUMEADJUST:
 			showSingleFragmentInRootContent(volumeAdjustFragment);

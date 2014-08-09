@@ -1,8 +1,8 @@
 package com.aviacomm.hwmp2p.ui;
 
 
-import com.aviacomm.hwmp2p.MessageEnum;
 import com.aviacomm.hwmp2p.R;
+import com.aviacomm.hwmp2p.client.MessageEnum;
 import com.aviacomm.hwmp2p.sensor.MusicVolumeManager;
 import com.aviacomm.hwmp2p.team.ConnectionManager;
 

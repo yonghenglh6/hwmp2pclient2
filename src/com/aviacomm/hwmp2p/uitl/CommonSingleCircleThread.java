@@ -13,8 +13,16 @@ public class CommonSingleCircleThread implements Runnable {
 	public CommonSingleCircleThread() {
 	}
 
-	public void oneTask() {
+	public void setUp() {
+		// to work
+	}
 
+	public void tearDown() {
+		//towork
+	}
+
+	public void oneTask() {
+		// to work
 	}
 
 	public void setInterval(int interval) {
@@ -23,6 +31,10 @@ public class CommonSingleCircleThread implements Runnable {
 
 	public int getInterval() {
 		return interval;
+	}
+
+	public boolean isRunning() {
+		return state == RUN;
 	}
 
 	public void start() {
@@ -49,6 +61,7 @@ public class CommonSingleCircleThread implements Runnable {
 
 	@Override
 	public void run() {
+		setUp();
 		while (state == RUN) {
 			try {
 				oneTask();
@@ -58,6 +71,7 @@ public class CommonSingleCircleThread implements Runnable {
 				e.printStackTrace();
 			}
 		}
+		tearDown();
 	}
 
 }

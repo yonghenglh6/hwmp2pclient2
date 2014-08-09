@@ -1,6 +1,6 @@
 package com.aviacomm.hwmp2p.sensor;
 
-import com.aviacomm.hwmp2p.MessageEnum;
+import com.aviacomm.hwmp2p.client.MessageEnum;
 import com.aviacomm.hwmp2p.uitl.CommonSingleCircleThread;
 
 import android.content.Context;

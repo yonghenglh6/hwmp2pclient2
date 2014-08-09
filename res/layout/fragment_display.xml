@@ -105,7 +105,7 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/display_lowbattery"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -118,11 +118,11 @@
         android:textSize="13sp" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/display_criticaldanger"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/textView3"
-        android:layout_toRightOf="@+id/textView3"
+        android:layout_alignTop="@+id/display_lowbattery"
+        android:layout_toRightOf="@+id/display_lowbattery"
         android:text="CRITICAL DANGER"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:background="@drawable/display_warn_background"
@@ -130,11 +130,11 @@
         android:textSize="13sp" />
 
     <TextView
-        android:id="@+id/config_save"
+        android:id="@+id/display_outofrange"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView4"
-        android:layout_toRightOf="@+id/textView4"
+        android:layout_alignBaseline="@+id/display_criticaldanger"
+        android:layout_toRightOf="@+id/display_criticaldanger"
         android:text="OUT OF RANGE"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:background="@drawable/display_warn_background"

@@ -2,8 +2,7 @@ package com.aviacomm.hwmp2p.team;
 
 import android.net.wifi.p2p.WifiP2pDevice;
 
-
-public  class MWifiDirectAP {
+public class MWifiDirectAP {
 	public WifiP2pDevice device;
 	public String action;
 	public String gsignal;
@@ -14,9 +13,9 @@ public  class MWifiDirectAP {
 	public static final int RECORDFOUND = 1;
 	public static final int REGISTERTYPEFOUND = 2;
 
-	public MWifiDirectAP(WifiP2pDevice device, String action,
-			String gsignal, String nickname, String listenPort,
-			String registerType, int infoCompletion) {
+	public MWifiDirectAP(WifiP2pDevice device, String action, String gsignal,
+			String nickname, String listenPort, String registerType,
+			int infoCompletion) {
 		super();
 		this.device = device;
 		this.action = action;
@@ -29,15 +28,14 @@ public  class MWifiDirectAP {
 
 	public static MWifiDirectAP getInstance(WifiP2pDevice device,
 			String registerType) {
-		return new MWifiDirectAP(device, null, null, null, null,
-				registerType, REGISTERTYPEFOUND);
+		return new MWifiDirectAP(device, null, null, null, null, registerType,
+				REGISTERTYPEFOUND);
 	}
 
 	public static MWifiDirectAP getInstance(WifiP2pDevice device,
-			String action, String gsignal, String nickname,
-			String listenPort) {
-		return new MWifiDirectAP(device, action, gsignal, nickname,
-				listenPort, null, RECORDFOUND);
+			String action, String gsignal, String nickname, String listenPort) {
+		return new MWifiDirectAP(device, action, gsignal, nickname, listenPort,
+				null, RECORDFOUND);
 	}
 
 	/*
@@ -65,8 +63,7 @@ public  class MWifiDirectAP {
 		return isComplete;
 	}
 	/*
-	 * @Override public boolean equals(Object o) { return
-	 * device.deviceAddress .equalsIgnoreCase(((WifiP2pDevice)
-	 * o).deviceAddress); }
+	 * @Override public boolean equals(Object o) { return device.deviceAddress
+	 * .equalsIgnoreCase(((WifiP2pDevice) o).deviceAddress); }
 	 */
 }

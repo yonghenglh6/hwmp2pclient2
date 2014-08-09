@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import com.aviacomm.hwmp2p.HWMP2PClient;
-import com.aviacomm.hwmp2p.MessageEnum;
+
+import com.aviacomm.hwmp2p.client.HWMP2PClient;
+import com.aviacomm.hwmp2p.client.MessageEnum;
 import com.aviacomm.hwmp2p.uitl.WifiDirectConnectionUitl;
 
 import android.app.Activity;
@@ -42,17 +43,18 @@ public class ConnectionManager implements GroupInfoListener {
 	public static boolean backupAp = false;
 	private Channel mChannel;
 	private WifiP2pManager mWifiP2pManager;
-	private TeamManager teamManager;
+	// private TeamManager teamManager;
 	// public static final String TXTRECORD_PROP_AVAILABLE = "available";
-	// public static final String SERVICE_INSTANCE = "hwmp2pclient";
-	Activity mainActivity;
+	// public static final String SERVICE_INSTANCE = "HWMP2PClient";
+	Context context;
 	WiFiDirectBroadcastReceiver receiver;
 	private DnsSdServiceResponseListener dnsSdServiceResponseListener;
 	private DnsSdTxtRecordListener dnsSdTxtRecordListener;
 	public final String TAG = "ConnectionManager";
 	public final String INSTANCENAME = "hwmp2p";
 	public final String REGISTIONTYPE = "_presence._tcp";
-	Handler handler;
+
+	// Handler handler;
 	List<MWifiDirectAP> aplist;
 	@SuppressWarnings("unused")
 	private boolean mWifiP2pEnabled;
@@ -66,23 +68,26 @@ public class ConnectionManager implements GroupInfoListener {
 
 	WifiStateManager wifiStateManager;
 
-	public ConnectionManager(Activity activity,
-			ConnectionManagerListener listener, Handler handler) {
-		this.mainActivity = activity;
-		this.listener = listener;
-		this.handler = handler;
+	private static final int BASE = 43659618;
+	public static final int EVENT_WIFIAPDISCOVED = BASE + 1;
+	public static final int EVENT_CONNECTIONESTABLISHED = BASE + 2;
+	public static final int EVENT_CONNECTIONBROKEN = BASE + 3;
 
+	public ConnectionManager(Context context, ConnectionManagerListener listener) {
+		this.context = context;
+		this.listener = listener;
+		// this.handler = handler;
 	}
 
 	// ！！！！ you must invoke initial function before any usage.
 	public void initial() {
 		aplist = new ArrayList<MWifiDirectAP>();
-		mWifiP2pManager = (WifiP2pManager) mainActivity
+		mWifiP2pManager = (WifiP2pManager) context
 				.getSystemService(Context.WIFI_P2P_SERVICE);
-		mChannel = mWifiP2pManager.initialize(mainActivity,
-				mainActivity.getMainLooper(), null);
-		wifiStateManager = new WifiStateManager(mainActivity);
-		teamManager = new TeamManager();
+		mChannel = mWifiP2pManager.initialize(context, context.getMainLooper(),
+				null);
+		wifiStateManager = new WifiStateManager(context);
+
 		receiver = new WiFiDirectBroadcastReceiver();
 		dnsSdServiceResponseListener = new DnsSdServiceResponseListener() {
 			@Override
@@ -111,15 +116,16 @@ public class ConnectionManager implements GroupInfoListener {
 		};
 		mWifiP2pManager.setDnsSdResponseListeners(mChannel,
 				dnsSdServiceResponseListener, dnsSdTxtRecordListener);
+		registerMe();
 	}
 
-	public void start() {
-		mainActivity.registerReceiver(receiver, receiver.getWifiDirectFilter());
+	public void registerMe() {
+		context.registerReceiver(receiver, receiver.getWifiDirectFilter());
 		addServiceRequest();
 	}
 
-	public void stop() {
-		mainActivity.unregisterReceiver(receiver);
+	public void unregisterMe() {
+		context.unregisterReceiver(receiver);
 	}
 
 	WifiP2pDnsSdServiceRequest serviceRequest;
@@ -149,10 +155,9 @@ public class ConnectionManager implements GroupInfoListener {
 			if (ori == null) {
 				// first find the device
 				aplist.add(ap);
+				listener.onInvokeConnectionEvent(EVENT_WIFIAPDISCOVED, ap);
 				HWMP2PClient.log.i(TAG, "A new device address:"
 						+ ap.device.deviceAddress);
-				handler.obtainMessage(MessageEnum.WIFIAPDISCOVED, ap)
-						.sendToTarget();
 			} else {
 				int state = ori.Combine(ap);
 				if (state == 1) {
@@ -165,7 +170,7 @@ public class ConnectionManager implements GroupInfoListener {
 
 	public void connect(MWifiDirectAP ap) {
 		HWMP2PClient.log.i(TAG, "Invite :" + ap.device.deviceAddress);
-		teamManager.onStartConnect(ap);
+		// teamManager.onStartConnect(ap);
 		WifiP2pConfig config;
 		config = new WifiP2pConfig();
 		config.deviceAddress = ap.device.deviceAddress;
@@ -209,23 +214,27 @@ public class ConnectionManager implements GroupInfoListener {
 		mWifiP2pManager.addLocalService(mChannel, addteamservice,
 				new ErrorSolutionActionListener(
 						ErrorSolutionActionListener.ADDLOCALSERVICE,
-						"create team"));
+						"create teamservice"));
+		// mWifiP2pManager.createGroup(mChannel, new
+		// ErrorSolutionActionListener(
+		// ErrorSolutionActionListener.ADDLOCALSERVICE,
+		// "create team group"));
 		discoverTeamService();
 	}
 
 	private void onConnectionEstablished() {
 		HWMP2PClient.log.i(TAG, "Connection is Established!");
 		mLastGroupFormed = true;
-		handler.obtainMessage(MessageEnum.CONNECTIONESTABLISHED,
-				teamManager.getcurrentAP()).sendToTarget();
-		teamManager.onConnected();
+		listener.onInvokeConnectionEvent(EVENT_CONNECTIONESTABLISHED, null);
+
+		// teamManager.onConnected();
 	}
 
 	private void onConnectionBreaken() {
 		HWMP2PClient.log.i(TAG, "I'm Disconnected.");
-		teamManager.onDisconnected();
-		handler.obtainMessage(MessageEnum.CONNECTIONBROKEN).sendToTarget();
-		teamManager.onConnected();
+		// teamManager.onDisconnected();
+		listener.onInvokeConnectionEvent(EVENT_CONNECTIONBROKEN, null);
+		// teamManager.onConnected();
 	}
 
 	/*
@@ -312,7 +321,8 @@ public class ConnectionManager implements GroupInfoListener {
 		public static final int REDISCOVERY = 3;
 		public static final int THIRDDISCOVERY = 4;
 		public static final int CLEARSERVICEREQUEST = 5;
-		public static final int CONNECT = 5;
+		public static final int CONNECT = 6;
+		public static final int CREATEGROUP = 7;
 		public static final int OTHER = 100;
 		private int action;
 		private String actionDescription;

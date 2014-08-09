@@ -1,7 +1,7 @@
 package com.aviacomm.hwmp2p.ui;
 
-import com.aviacomm.hwmp2p.MessageEnum;
 import com.aviacomm.hwmp2p.R;
+import com.aviacomm.hwmp2p.client.MessageEnum;
 import com.aviacomm.hwmp2p.sensor.MusicVolumeManager;
 import com.aviacomm.hwmp2p.team.ConnectionManager;
 import com.aviacomm.hwmp2p.team.WifiStateManager;
@@ -39,6 +39,7 @@ public class MainPageFragment extends Fragment {
 	Button resetwifi;
 	ImageView config;
 	int currentStreamVolume = 0;
+	int currentBatteryLevel = 0;
 	MusicVolumeManager musicVolumeManager;
 	WifiStateManager wifiStateManager;
 	TextView batteryLevelText;
@@ -76,12 +77,11 @@ public class MainPageFragment extends Fragment {
 		back = (ImageButton) view.findViewById(R.id.mainpage_back_button);
 		back.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
-				listener.onClickMainPageButton(MainPageListener.BUTTON_BACK,
-						null);
+				// listener.onClickMainPageButton(MainPageListener.BUTTON_BACK,
+				// null);
 			}
 		});
-		config= (ImageView) view
-				.findViewById(R.id.mainpage_config_button);
+		config = (ImageView) view.findViewById(R.id.mainpage_config_button);
 		batteryLevelText = (TextView) view
 				.findViewById(R.id.mainpage_battery_number);
 		connection_establish_indicator = (ImageView) view
@@ -113,8 +113,7 @@ public class MainPageFragment extends Fragment {
 		config.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				listener.onClickMainPageButton(
-						MainPageListener.CONFIG, null);
+				listener.onClickMainPageButton(MainPageListener.CONFIG, null);
 			}
 		});
 		// wifi_intensity.setImageResource(R.drawable.wifi_intensity_levellist);
@@ -135,21 +134,25 @@ public class MainPageFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
+		updateUI();
+	}
+
+	private void updateUI() {
 		volume.setProgress(musicVolumeManager.getVolumeLevel());
 		connection_establish_indicator.setAlpha(isConnectionEstablished ? 0f
 				: 1f);
-	}
-
-	private void updateBatteryUI(int level) {
-		battery.setProgress(level);
-		batteryLevelText.setText(level + "%");
+		battery.setProgress(currentBatteryLevel);
+		batteryLevelText.setText(currentBatteryLevel + "%");
 	}
 
 	public void handleMessage(Message msg) {
 		switch (msg.what) {
 		case MessageEnum.BATTERYCHANGE:
-			if (battery != null)
-				updateBatteryUI(msg.arg1);
+			if (battery != null) {
+				currentBatteryLevel = msg.arg1;
+				updateUI();
+			}
+
 			break;
 		case MessageEnum.VOLUMECHANGE:
 			if (volume != null)
@@ -187,6 +190,7 @@ public class MainPageFragment extends Fragment {
 		public static final int BUTTON_CREATETEAM = 3;
 		public static final int VOLUMEADJUST = 4;
 		public static final int CONFIG = 5;
+
 		public void onClickMainPageButton(int buttonId, Object obj);
 	}
 }
