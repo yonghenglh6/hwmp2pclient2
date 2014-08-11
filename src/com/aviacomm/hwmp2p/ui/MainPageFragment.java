@@ -4,6 +4,7 @@ import com.aviacomm.hwmp2p.R;
 import com.aviacomm.hwmp2p.client.MessageEnum;
 import com.aviacomm.hwmp2p.sensor.MusicVolumeManager;
 import com.aviacomm.hwmp2p.team.ConnectionManager;
+import com.aviacomm.hwmp2p.team.TeamManager;
 import com.aviacomm.hwmp2p.team.WifiStateManager;
 import android.app.Fragment;
 import android.content.Context;
@@ -166,14 +167,14 @@ public class MainPageFragment extends Fragment {
 			if (wifi_intensity != null)
 				wifi_intensity.setImageLevel(msg.arg1);
 			break;
-		case MessageEnum.CONNECTIONESTABLISHED:
+		case TeamManager.WHAT_CONNECTIONESTABLISHED:
 			if (connection_establish_indicator != null) {
 				isConnectionEstablished = true;
 				connection_establish_indicator.setAlpha(0f);
 				// HWMP2PClient.log.i("it should be invisible");
 			}
 			break;
-		case MessageEnum.CONNECTIONBROKEN:
+		case TeamManager.WHAT_CONNECTIONBROKEN:
 			if (connection_establish_indicator != null) {
 				isConnectionEstablished = false;
 				connection_establish_indicator.setAlpha(1f);

@@ -2,7 +2,7 @@
     <!-- 背景图片 -->  
     <item  
         android:id="@android:id/background"  
-        android:drawable="@drawable/volumeadjust_volume_background" />  
+        android:drawable="@drawable/volumeadjust_volume_background2" />  
   
     <!-- 进度图片 -->  
     <item  
@@ -10,7 +10,7 @@
         <clip>  
             <!-- 为了防止bitmap被拉伸，所以没有直接用clip的android:drawable属性-->  
             <bitmap  
-                android:src="@drawable/volumeadjust_volume_loading"  
+                android:src="@drawable/volumeadjust_volume_loading2"  
                 android:gravity="left" />  
         </clip>  
     </item>  

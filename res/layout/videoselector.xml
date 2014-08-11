@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/AbsoluteLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:background="@drawable/volumeadjust_background"
+    >
+
+    <TextView
+        android:id="@+id/video_button_name1"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_x="99dp"
+        android:layout_y="74dp"
+        android:background="@drawable/vedio_button1"
+        android:gravity="center"
+        android:text="Commander"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/BLACK" />
+
+    <TextView
+        android:id="@+id/video_cancel_button"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_x="125dp"
+        android:layout_y="241dp"
+        android:text="cancel"
+        android:gravity="center"
+            android:background="@drawable/negativebutton"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/BLACK" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="51dp"
+        android:layout_x="9dp"
+        android:layout_y="132dp" >
+
+        <TextView
+            android:id="@+id/video_button_name2"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/vedio_button2"
+            android:gravity="center"
+            android:text="Albert"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/BLACK" />
+
+        <TextView
+            android:id="@+id/video_button_name3"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/vedio_button3"
+            android:gravity="center"
+            android:text="Ben"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/BLACK" />
+
+        <TextView
+            android:id="@+id/video_button_name4"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/vedio_button2"
+            android:gravity="center"
+            android:text="Charles"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/BLACK" />
+
+        <TextView
+            android:id="@+id/video_button_name5"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/vedio_button2"
+            android:gravity="center"
+            android:text="David"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/BLACK" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="51dp"
+        android:layout_x="9dp"
+        android:layout_y="183dp" >
+
+        <TextView
+            android:id="@+id/video_button_name6"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/vedio_button3"
+            android:gravity="center"
+            android:text="Edward"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/BLACK" />
+
+        <TextView
+            android:id="@+id/video_button_name7"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/vedio_button2"
+            android:gravity="center"
+            android:text="Frank"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/BLACK" />
+
+        <TextView
+            android:id="@+id/video_button_name8"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/vedio_button2"
+            android:gravity="center"
+            android:text="George"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/BLACK" />
+
+        <TextView
+            android:id="@+id/video_button_name9"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/vedio_button2"
+            android:gravity="center"
+            android:text="Henry"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/BLACK" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="22dp"
+        android:layout_y="32dp"
+        android:text="Touching the name for vedio call"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/RED" />
+
+</AbsoluteLayout>

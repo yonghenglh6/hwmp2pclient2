@@ -35,12 +35,25 @@
     <ScrollView
         android:id="@+id/stateTextScroll"
         android:layout_width="match_parent"
-        android:layout_height="270dp"
-        android:layout_alignParentBottom="true" >
-        <TextView
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp" >
+
+        <TextView
             android:id="@+id/stateText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/vediodialogLayout"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical" 
+        android:visibility="gone"
+        >	
+    </RelativeLayout>
 
 </RelativeLayout>

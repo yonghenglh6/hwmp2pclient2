@@ -3,6 +3,7 @@ package com.aviacomm.hwmp2p.ui;
 import com.aviacomm.hwmp2p.R;
 import com.aviacomm.hwmp2p.client.ClientConfig;
 import com.aviacomm.hwmp2p.client.HWMP2PClient;
+import com.aviacomm.hwmp2p.sensor.ScreenVolumeAdjust;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -16,6 +17,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class ClientConfigFragment extends Fragment {
@@ -31,6 +34,8 @@ public class ClientConfigFragment extends Fragment {
 			R.id.config_maxbreath, R.id.config_temperature };
 	String attrname[] = { "devicename", "deviceid", "minheart", "maxheart",
 			"minbreath", "maxbreath", "temperature" };
+	ImageView screenadjustbutton;
+	RelativeLayout adjustLayout;
 
 	public ClientConfigFragment(Context context, ClientConfigListener listener) {
 		super();
@@ -40,6 +45,10 @@ public class ClientConfigFragment extends Fragment {
 	}
 
 	int currentUnit;
+	ImageView light_save, light_cancel, light_increase, light_decrease;
+	ProgressBar light_bar;
+	int initialScreenLight = 0;
+	float currentScreenLight = 0;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,8 +57,58 @@ public class ClientConfigFragment extends Fragment {
 		cfbutton = (ImageView) view.findViewById(R.id.config_cf_button);
 		save = (View) view.findViewById(R.id.config_save);
 		cancel = (View) view.findViewById(R.id.config_cancel);
+		screenadjustbutton = (ImageView) view.findViewById(R.id.adjustscreen);
+		adjustLayout = (RelativeLayout) view
+				.findViewById(R.id.volumeadjust_layout);
+		adjustLayout.setVisibility(View.GONE);
 		currentUnit = ClientConfig.TemperatureUnit;
+
+		currentScreenLight = ScreenVolumeAdjust.GetLightness(context);
+		initialScreenLight = (int) currentScreenLight;
 		cfbutton.setImageLevel(currentUnit);
+		light_save = (ImageView) view.findViewById(R.id.volumeadjust_save);
+		light_cancel = (ImageView) view.findViewById(R.id.volumeadjust_cancel);
+		light_increase = (ImageView) view
+				.findViewById(R.id.volumeadjust_volume_increase);
+		light_bar = (ProgressBar) view
+				.findViewById(R.id.volumeadjust_volume_progressbar);
+		light_decrease = (ImageView) view
+				.findViewById(R.id.volumeadjust_volume_decrease);
+
+		OnClickListener lightOnClickListener = new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				if (arg0 == light_save) {
+					adjustLayout.setVisibility(View.GONE);
+				} else if (arg0 == light_cancel) {
+					ScreenVolumeAdjust
+							.SetLightness(context, initialScreenLight);
+					adjustLayout.setVisibility(View.GONE);
+				} else if (arg0 == light_increase) {
+					currentScreenLight += 25.5;
+					if (currentScreenLight > 255)
+						currentScreenLight = 255;
+					ScreenVolumeAdjust.SetLightness(context,
+							(int) currentScreenLight);
+					light_bar
+							.setProgress(((int) (currentScreenLight * 10 / 255)) * 10);
+				} else if (arg0 == light_decrease) {
+
+					currentScreenLight -= 25.5;
+					if (currentScreenLight < 0)
+						currentScreenLight = 0;
+					ScreenVolumeAdjust.SetLightness(context,
+							(int) currentScreenLight);
+					light_bar
+							.setProgress(((int) (currentScreenLight * 10 / 255)) * 10);
+				}
+			}
+		};
+		light_save.setOnClickListener(lightOnClickListener);
+		light_cancel.setOnClickListener(lightOnClickListener);
+		light_increase.setOnClickListener(lightOnClickListener);
+		light_decrease.setOnClickListener(lightOnClickListener);
+
 		cfbutton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -73,6 +132,17 @@ public class ClientConfigFragment extends Fragment {
 				initAllvalue();
 				listener.onClickClientConfigButton(
 						ClientConfigListener.BUTTON_CANCEL, null);
+			}
+		});
+		screenadjustbutton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+
+				currentScreenLight = ScreenVolumeAdjust.GetLightness(context);
+				initialScreenLight = (int) currentScreenLight;
+				light_bar
+						.setProgress(((int) (currentScreenLight * 10 / 255)) * 10);
+				adjustLayout.setVisibility(View.VISIBLE);
 			}
 		});
 		initAllvalue();

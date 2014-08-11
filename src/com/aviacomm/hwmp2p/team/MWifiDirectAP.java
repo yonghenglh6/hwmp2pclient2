@@ -1,6 +1,7 @@
 package com.aviacomm.hwmp2p.team;
 
 import android.net.wifi.p2p.WifiP2pDevice;
+import android.util.Log;
 
 public class MWifiDirectAP {
 	public WifiP2pDevice device;
@@ -24,6 +25,15 @@ public class MWifiDirectAP {
 		this.listenPort = listenPort;
 		this.registerType = registerType;
 		this.infoCompletion = infoCompletion;
+		/*
+		 * This should be fixed later.
+		 */
+		String[] parts = registerType.split(":");
+		if (parts.length >= 2) {
+			String listenPortlocal = parts[parts.length - 1];
+			this.listenPort = listenPortlocal.split("\\.")[0];
+		}
+		Log.i("default", "parts:" + registerType + "  listenPort:" + this.listenPort);
 	}
 
 	public static MWifiDirectAP getInstance(WifiP2pDevice device,

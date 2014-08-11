@@ -4,8 +4,30 @@
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    tools:context=".HWMP2PClient" 
-   android:background="@drawable/action_pic"
-    >
+    tools:context=".HWMP2PClient" >
+
+    <ImageView
+        android:id="@+id/walk_button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:scaleType="fitXY"
+        android:src="@drawable/walkie_button" />
+
+    <ImageView
+        android:id="@+id/urgen_button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:scaleType="fitXY"
+        android:src="@drawable/urgen_button_level_list" />
+
+    <ImageView
+        android:id="@+id/video_button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:scaleType="fitXY"
+        android:src="@drawable/video_button" />
 
 </LinearLayout>

@@ -68,6 +68,7 @@ public class DisplayPageFragment extends Fragment {
 	}
 
 	public void initModule() {
+		checkCriticalWarn();
 		if (HWMP2PClient.HASBLUETOOTH) {
 			bioHarnessManager = new BioHarnessManager(displayhandler, context);
 			bioHarnessManager.start();
@@ -105,7 +106,7 @@ public class DisplayPageFragment extends Fragment {
 		float temperature = Float.valueOf(config.getValue("temperature"));
 
 		if (i_heart < minheart || i_heart > maxheart || i_breath < minbreath
-				|| i_breath > maxbreath || i_temperature > temperature) {
+				|| i_breath > maxbreath || i_temperature < temperature) {
 			if (criticalWarnstate == 0) {
 				criticalWarnstate = 1;
 				displayhandler.post(criticalWarnTask);
@@ -115,9 +116,9 @@ public class DisplayPageFragment extends Fragment {
 		}
 	}
 
-	int i_heart = 0;
-	float i_breath = 0;
-	float i_temperature = 0;
+	public static int i_heart = 0;
+	public static float i_breath = 0;
+	public static float i_temperature = 0;
 	final Handler displayhandler = new Handler() {
 		public void handleMessage(Message msg) {
 			TextView tv;

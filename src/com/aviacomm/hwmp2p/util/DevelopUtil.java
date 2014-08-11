@@ -1,4 +1,4 @@
-package com.aviacomm.hwmp2p.uitl;
+package com.aviacomm.hwmp2p.util;
 
 import android.os.SystemClock;
 

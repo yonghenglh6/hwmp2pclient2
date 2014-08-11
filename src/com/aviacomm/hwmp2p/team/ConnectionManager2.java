@@ -5,9 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.aviacomm.hwmp2p.client.HWMP2PClient;
-import com.aviacomm.hwmp2p.client.MessageEnum;
-import com.aviacomm.hwmp2p.uitl.WifiDirectConnectionUitl;
+import com.aviacomm.hwmp2p.util.WifiDirectConnectionUitl;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;

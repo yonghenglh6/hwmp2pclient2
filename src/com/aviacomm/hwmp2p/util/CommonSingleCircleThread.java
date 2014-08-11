@@ -1,10 +1,10 @@
-package com.aviacomm.hwmp2p.uitl;
+package com.aviacomm.hwmp2p.util;
 
 /*
  * This is a loop thread for reducing code amount
  */
 public class CommonSingleCircleThread implements Runnable {
-	static int state;
+	int state;
 	private final int RUN = 1;
 	private final int STOP = 2;
 	private int interval = 1000;
@@ -18,7 +18,7 @@ public class CommonSingleCircleThread implements Runnable {
 	}
 
 	public void tearDown() {
-		//towork
+		// towork
 	}
 
 	public void oneTask() {
@@ -65,7 +65,8 @@ public class CommonSingleCircleThread implements Runnable {
 		while (state == RUN) {
 			try {
 				oneTask();
-				Thread.sleep(interval);
+				if (interval != 0)
+					Thread.sleep(interval);
 			} catch (Exception e) {
 				state = STOP;
 				e.printStackTrace();

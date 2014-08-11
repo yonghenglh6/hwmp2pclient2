@@ -1,7 +1,9 @@
 package com.aviacomm.hwmp2p.team;
 
-import com.aviacomm.hwmp2p.uitl.DevelopUtil;
-import com.aviacomm.hwmp2p.uitl.DevelopUtil.waitCondition;
+
+
+import com.aviacomm.hwmp2p.util.DevelopUtil;
+import com.aviacomm.hwmp2p.util.DevelopUtil.waitCondition;
 
 import android.content.Context;
 import android.net.wifi.WifiManager;

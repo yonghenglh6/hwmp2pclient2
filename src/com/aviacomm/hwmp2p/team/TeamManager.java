@@ -3,7 +3,6 @@ package com.aviacomm.hwmp2p.team;
 import javax.sql.ConnectionEvent;
 import javax.sql.ConnectionEventListener;
 
-import com.aviacomm.hwmp2p.client.MessageEnum;
 import com.aviacomm.hwmp2p.team.ConnectionManager.ConnectionManagerListener;
 
 import android.content.Context;
@@ -22,26 +21,31 @@ public class TeamManager implements ConnectionManagerListener {
 	public static final int WHAT_WIFIAPDISCOVED = BASE + 1;
 	public static final int WHAT_CONNECTIONESTABLISHED = BASE + 2;
 	public static final int WHAT_CONNECTIONBROKEN = BASE + 3;
-
+	public static final int WHAT_GROUPFORMED = BASE + 4;
+	private boolean isFormed = false;
+	public static MLog log;
 	enum GROUPSTATE {
 		DISSOCIATE, JOINING, JOINED, LEADER, BEOKEN
 	}
-
+	public static int BASELISTENPORT=6734;
 	Context context;
 	String currentGsignal;
 	Handler handler;
-
-	public TeamManager(Context context, Handler handler) {
+	static String listenPort=BASELISTENPORT+"";
+	public TeamManager(Context context, Handler handler,MLog log) {
 		this.context = context;
 		this.handler = handler;
+		this.log=log;
 		connectionManager = new ConnectionManager(context, this);
 	}
 
 	public void initial() {
-		
+
 		connectionManager.initial();
 	}
-
+	public String getListenPort(){
+		return listenPort;
+	}
 	public boolean isConnected() {
 		return connectionManager.isConnected();
 	}
@@ -62,7 +66,9 @@ public class TeamManager implements ConnectionManagerListener {
 	}
 
 	public void connect(MWifiDirectAP ap) {
-		currentap=ap;
+		currentap = ap;
+		listenPort=ap.listenPort;
+		Log.i("default",listenPort+"this is the port");
 		connectionManager.connect(ap);
 	}
 
@@ -74,15 +80,17 @@ public class TeamManager implements ConnectionManagerListener {
 	public void onInvokeConnectionEvent(int eventId, Object obj) {
 		switch (eventId) {
 		case ConnectionManager.EVENT_CONNECTIONBROKEN:
-			handler.obtainMessage(MessageEnum.CONNECTIONBROKEN).sendToTarget();
+			handler.obtainMessage(WHAT_CONNECTIONBROKEN).sendToTarget();
 			break;
 		case ConnectionManager.EVENT_CONNECTIONESTABLISHED:
-			handler.obtainMessage(MessageEnum.CONNECTIONESTABLISHED, currentap)
-					.sendToTarget();
+			handler.obtainMessage(WHAT_CONNECTIONESTABLISHED).sendToTarget();
+			break;
+		case ConnectionManager.EVENT_GROUPFORMED:
+			handler.obtainMessage(WHAT_GROUPFORMED, obj).sendToTarget();
 			break;
 		case ConnectionManager.EVENT_WIFIAPDISCOVED:
 			Log.i(TAG, "apfound");
-			handler.obtainMessage(MessageEnum.WIFIAPDISCOVED, obj).sendToTarget();
+			handler.obtainMessage(WHAT_WIFIAPDISCOVED, obj).sendToTarget();
 			break;
 		}
 	}

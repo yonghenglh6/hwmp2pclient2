@@ -3,6 +3,7 @@ package com.aviacomm.hwmp2p.ui;
 import com.aviacomm.hwmp2p.R;
 import com.aviacomm.hwmp2p.client.MessageEnum;
 import com.aviacomm.hwmp2p.team.MWifiDirectAP;
+import com.aviacomm.hwmp2p.team.TeamManager;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -32,6 +34,7 @@ public class APSelectorFragment extends Fragment implements Callback {
 	Context context;
 	Handler apselectorHandler = new Handler(this);
 	ApSelectorListener listener;
+	ProgressBar scan_progressBar;
 
 	public APSelectorFragment(Context context, ApSelectorListener listener) {
 		super();
@@ -46,6 +49,8 @@ public class APSelectorFragment extends Fragment implements Callback {
 				.inflate(R.layout.fragment_ap_selector, container, false);
 		apgroup = (RadioGroup) view.findViewById(R.id.apGroup);
 		connect = (Button) view.findViewById(R.id.apselector_connect);
+		scan_progressBar = (ProgressBar) view
+				.findViewById(R.id.scan_progressBar);
 		connect.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -73,6 +78,7 @@ public class APSelectorFragment extends Fragment implements Callback {
 		rescan.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
+				isFound = false;
 				apgroup.removeAllViews();
 				listener.onClickAPSelectorButton(
 						ApSelectorListener.BUTTON_RESCAN, null);
@@ -94,19 +100,29 @@ public class APSelectorFragment extends Fragment implements Callback {
 		public void onClickAPSelectorButton(int but_id, Object obj);
 	}
 
+	boolean isFound = false;
+
 	public boolean handleMessage(Message msg) {
-		if(!this.isResumed())
+		if (!this.isResumed())
 			return false;
 		switch (msg.what) {
-		case MessageEnum.WIFIAPDISCOVED:
-			if (apgroup != null)
+		case TeamManager.WHAT_WIFIAPDISCOVED:
+			if (apgroup != null) {
+				scan_progressBar.setVisibility(View.INVISIBLE);
 				apgroup.addView(new MAPRadioButton(context,
 						(MWifiDirectAP) msg.obj));
+			}
 			break;
 		default:
 			break;
 		}
 		return false;
+	}
+
+	@Override
+	public void onResume() {
+		scan_progressBar.setVisibility(View.VISIBLE);
+		super.onResume();
 	}
 
 	public class MAPRadioButton extends RadioButton {

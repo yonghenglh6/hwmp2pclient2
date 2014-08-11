@@ -5,9 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.aviacomm.hwmp2p.client.HWMP2PClient;
-import com.aviacomm.hwmp2p.client.MessageEnum;
-import com.aviacomm.hwmp2p.uitl.WifiDirectConnectionUitl;
+import com.aviacomm.hwmp2p.util.WifiDirectConnectionUitl;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -23,6 +21,7 @@ import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
+import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.DnsSdServiceResponseListener;
 import android.net.wifi.p2p.WifiP2pManager.DnsSdTxtRecordListener;
 import android.net.wifi.p2p.WifiP2pManager.GroupInfoListener;
@@ -65,13 +64,14 @@ public class ConnectionManager implements GroupInfoListener {
 	private WifiP2pDevice mThisDevice;
 	public int SERVER_PORT;
 	public String nickname;
-
+	public MLog log = TeamManager.log;
 	WifiStateManager wifiStateManager;
 
 	private static final int BASE = 43659618;
 	public static final int EVENT_WIFIAPDISCOVED = BASE + 1;
 	public static final int EVENT_CONNECTIONESTABLISHED = BASE + 2;
 	public static final int EVENT_CONNECTIONBROKEN = BASE + 3;
+	public static final int EVENT_GROUPFORMED = BASE + 4;
 
 	public ConnectionManager(Context context, ConnectionManagerListener listener) {
 		this.context = context;
@@ -94,10 +94,11 @@ public class ConnectionManager implements GroupInfoListener {
 			public void onDnsSdServiceAvailable(String instanceName,
 					String registrationType, WifiP2pDevice srcDevice) {
 				// A service has been discovered. Is this our app?
-				HWMP2PClient.log.i(TAG, "ServiceInstance Found");
+				log.i(TAG, "ServiceInstance Found");
 				if (instanceName.equalsIgnoreCase(INSTANCENAME)) {
 					MWifiDirectAP ap = MWifiDirectAP.getInstance(srcDevice,
 							registrationType);
+					Log.i("default","registType:"+registrationType+"   port:"+ap.listenPort);
 					checkForList(ap);
 				}
 			}
@@ -107,7 +108,7 @@ public class ConnectionManager implements GroupInfoListener {
 			@Override
 			public void onDnsSdTxtRecordAvailable(String arg0,
 					Map<String, String> record, WifiP2pDevice device) {
-				HWMP2PClient.log.i(TAG, "TXT record Found");
+				log.i(TAG, "TXT record Found");
 				MWifiDirectAP ap = MWifiDirectAP.getInstance(device,
 						record.get("action"), record.get("gsignal"),
 						record.get("nickname"), record.get("listenport"));
@@ -116,6 +117,8 @@ public class ConnectionManager implements GroupInfoListener {
 		};
 		mWifiP2pManager.setDnsSdResponseListeners(mChannel,
 				dnsSdServiceResponseListener, dnsSdTxtRecordListener);
+
+		SERVER_PORT = WifiDirectConnectionUitl.getAvailablePort(TeamManager.BASELISTENPORT);
 		registerMe();
 	}
 
@@ -156,8 +159,7 @@ public class ConnectionManager implements GroupInfoListener {
 				// first find the device
 				aplist.add(ap);
 				listener.onInvokeConnectionEvent(EVENT_WIFIAPDISCOVED, ap);
-				HWMP2PClient.log.i(TAG, "A new device address:"
-						+ ap.device.deviceAddress);
+				log.i(TAG, "A new device address:" + ap.device.deviceAddress);
 			} else {
 				int state = ori.Combine(ap);
 				if (state == 1) {
@@ -169,7 +171,7 @@ public class ConnectionManager implements GroupInfoListener {
 	}
 
 	public void connect(MWifiDirectAP ap) {
-		HWMP2PClient.log.i(TAG, "Invite :" + ap.device.deviceAddress);
+		log.i(TAG, "Invite :" + ap.device.deviceAddress);
 		// teamManager.onStartConnect(ap);
 		WifiP2pConfig config;
 		config = new WifiP2pConfig();
@@ -194,7 +196,7 @@ public class ConnectionManager implements GroupInfoListener {
 
 	public void createTeamService() {
 		Map<String, String> record = new HashMap<String, String>();
-		SERVER_PORT = WifiDirectConnectionUitl.getAvailablePort();
+		Log.i("defalut",SERVER_PORT+"");
 		record.put("action", "CREATETEAM");
 		record.put("gsignal", WifiDirectConnectionUitl.generateGsignal());
 		record.put("listenport", String.valueOf(SERVER_PORT));
@@ -209,8 +211,11 @@ public class ConnectionManager implements GroupInfoListener {
 						new ErrorSolutionActionListener(
 								ErrorSolutionActionListener.OTHER,
 								"clearLocalServices"));
+
+		String registionMsg = REGISTIONTYPE + ":" + SERVER_PORT;
+		TeamManager.listenPort = SERVER_PORT + "";
 		WifiP2pDnsSdServiceInfo addteamservice = WifiP2pDnsSdServiceInfo
-				.newInstance(INSTANCENAME, REGISTIONTYPE, record);
+				.newInstance(INSTANCENAME, registionMsg, record);
 		mWifiP2pManager.addLocalService(mChannel, addteamservice,
 				new ErrorSolutionActionListener(
 						ErrorSolutionActionListener.ADDLOCALSERVICE,
@@ -222,16 +227,39 @@ public class ConnectionManager implements GroupInfoListener {
 		discoverTeamService();
 	}
 
+	boolean isFormedBefore=false;
 	private void onConnectionEstablished() {
-		HWMP2PClient.log.i(TAG, "Connection is Established!");
-		mLastGroupFormed = true;
-		listener.onInvokeConnectionEvent(EVENT_CONNECTIONESTABLISHED, null);
+		log.i(TAG, "Connection is Established!");
+		mWifiP2pManager.requestConnectionInfo(mChannel,
+				new ConnectionInfoListener() {
 
+					@Override
+					public void onConnectionInfoAvailable(WifiP2pInfo arg0) {
+						if (arg0.groupFormed) {
+							listener.onInvokeConnectionEvent(
+									EVENT_CONNECTIONESTABLISHED, null);
+							if (!isFormedBefore) {
+								log.i(TAG, "firstgroupFormed");
+								isFormedBefore = true;
+								listener.onInvokeConnectionEvent(
+										EVENT_GROUPFORMED, arg0);
+							} else {
+								// nothing happened
+							}
+							mLastGroupFormed = arg0.groupFormed;
+						} else {
+							if (mLastGroupFormed) {
+								listener.onInvokeConnectionEvent(
+										EVENT_CONNECTIONBROKEN, arg0);
+							}
+						}
+					}
+				});
 		// teamManager.onConnected();
 	}
 
 	private void onConnectionBreaken() {
-		HWMP2PClient.log.i(TAG, "I'm Disconnected.");
+		// log.i(TAG, "I'm Disconnected.");
 		// teamManager.onDisconnected();
 		listener.onInvokeConnectionEvent(EVENT_CONNECTIONBROKEN, null);
 		// teamManager.onConnected();
@@ -261,7 +289,6 @@ public class ConnectionManager implements GroupInfoListener {
 		public IntentFilter getWifiDirectFilter() {
 			return intentFilter;
 		}
-
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
@@ -285,11 +312,11 @@ public class ConnectionManager implements GroupInfoListener {
 				mLastGroupFormed = wifip2pinfo.groupFormed;
 				if (networkInfo.isConnected()) {
 					onConnectionEstablished();
-					HWMP2PClient.log.i(TAG, "Connected");
+					log.i(TAG, "Connected");
 				} else if (mLastGroupFormed != true) {
 					// we are disconnected
 					onConnectionBreaken();
-					HWMP2PClient.log.i(TAG, "Disconnected");
+					log.i(TAG, "Disconnected");
 				}
 			} else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION
 					.equals(action)) {
@@ -302,8 +329,7 @@ public class ConnectionManager implements GroupInfoListener {
 				int discoveryState = intent.getIntExtra(
 						WifiP2pManager.EXTRA_DISCOVERY_STATE,
 						WifiP2pManager.WIFI_P2P_DISCOVERY_STOPPED);
-				HWMP2PClient.log.i(TAG, "Discovery state changed: "
-						+ discoveryState);
+				log.i(TAG, "Discovery state changed: " + discoveryState);
 				if (discoveryState == WifiP2pManager.WIFI_P2P_DISCOVERY_STARTED) {
 					Toast.makeText(context, "discoverstarted",
 							Toast.LENGTH_SHORT).show();
@@ -371,20 +397,20 @@ public class ConnectionManager implements GroupInfoListener {
 				actionDescription += " 3 ";
 				mWifiP2pManager.discoverServices(mChannel, this);
 			} else {
-				HWMP2PClient.log.i(TAG, toActionString() + " WRONG:"
+				log.i(TAG, toActionString() + " WRONG:"
 						+ WifiDirectConnectionUitl.errorStateToString(reason));
 			}
 		}
 
 		public void onSuccess() {
-			HWMP2PClient.log.i(TAG, toActionString() + " OK");
+			log.i(TAG, toActionString() + " OK");
 		}
 
 	}
 
 	private void handleP2pStateChanged() {
 		// TODO Auto-generated method stub
-		HWMP2PClient.log.i(TAG, "p2psearch state changed");
+		log.i(TAG, "p2psearch state changed");
 	}
 
 	@Override
@@ -397,8 +423,7 @@ public class ConnectionManager implements GroupInfoListener {
 			groupInfoStr += "ClientListNumber: " + arg0.getClientList().size()
 					+ "\n";
 			groupInfoStr += "Passphrase: " + arg0.getPassphrase() + "\n";
-
-			HWMP2PClient.log.i(groupInfoStr);
+			log.i(groupInfoStr);
 		}
 	}
 
